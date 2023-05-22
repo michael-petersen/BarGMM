@@ -123,4 +123,4 @@ ax3.text(-900,900,'Ly-Lx',color='black',va='top',ha='left')
 
 
 
-plt.savefig('figures/testfig.png',dpi=300)
+plt.savefig('figures/ellipseplot.png',dpi=300)

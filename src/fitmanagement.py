@@ -502,7 +502,13 @@ def make_rotated_probabilities(Mock,good,COMPS,nanprint=False):
 
 def make_posterior_list_three_rotation_sorted(inputfile):
     """
-    read the three component posterior
+    Reads a three-component posterior from the input file and computes component statistics.
+
+    Args:
+        inputfile (str): Path to the input file.
+
+    Returns:
+        tuple: A tuple containing component statistics (COMPS) and complete statistics (CStats).
 
     """
     A = np.genfromtxt(inputfile)
@@ -554,3 +560,134 @@ def make_posterior_list_three_rotation_sorted(inputfile):
         COMPS[cnum] = [np.nanmedian(CStats[cnum]['f']),np.nanmedian(x),np.nanmedian(y),np.nanmedian(z),np.nanmedian(1./CStats[cnum]['sxinv']),np.nanmedian(1./CStats[cnum]['syinv']),np.nanmedian(1./CStats[cnum]['szinv']),np.nanmedian(CStats[cnum]['alpha'])]
 
     return COMPS,CStats
+
+
+
+
+def cstats_to_comps(CStats, indx):
+    """
+    Converts cstats data to components data.
+
+    Args:
+        CStats (list): A list containing cstats data.
+        indx (int): The index to extract data from CStats.
+
+    Returns:
+        dict: A dictionary containing components data.
+
+    """
+    COMPS = dict()
+
+    for cnum in range(0, 3):
+        r = 10. ** CStats[cnum]['logL']
+        th = np.arccos(CStats[cnum]['theta'])
+        phi = CStats[cnum]['phi']
+        x = r * np.sin(th) * np.cos(phi)
+        y = r * np.sin(th) * np.sin(phi)
+        z = r * np.cos(th)
+
+        if 'alpha' in CStats[cnum].keys():
+            COMPS[cnum] = [
+                CStats[cnum]['f'][indx],
+                x[indx],
+                y[indx],
+                z[indx],
+                1. / CStats[cnum]['sxinv'][indx],
+                1. / CStats[cnum]['syinv'][indx],
+                1. / CStats[cnum]['szinv'][indx],
+                CStats[cnum]['alpha'][indx]
+            ]
+        else:
+            COMPS[cnum] = [
+                CStats[cnum]['f'][indx],
+                x[indx],
+                y[indx],
+                z[indx],
+                1. / CStats[cnum]['sxinv'][indx],
+                1. / CStats[cnum]['syinv'][indx],
+                1. / CStats[cnum]['szinv'][indx]
+            ]
+
+    return COMPS
+
+def make_all_probabilities(data, criteria, CStats, nchains=100):
+    """
+    Computes all probabilities based on given data, criteria, and cstats.
+
+    Args:
+        data (dict): A dictionary containing data.
+        criteria (ndarray): An array of criteria.
+        CStats (list): A list containing cstats data.
+        nchains (int, optional): The number of chains. Defaults to 100.
+
+    Returns:
+        tuple: A tuple containing all probabilities, percentile probabilities, and error probabilities.
+
+    """
+    # nchains = 100#CStats[0]['f'].size
+    nstars = criteria.size
+    print(nstars, np.nanmedian(data['R'][criteria]))
+
+    allprobs = np.zeros([nchains, nstars, 3])
+
+    for indx in range(0, nchains):
+        Cout = cstats_to_comps(CStats, indx)
+        allprobs[indx] = make_rotated_probabilities(data, criteria, Cout)  # make_probabilities(AllDiscSNR, criteria, Cout)
+
+    percentileprob = np.nanpercentile(allprobs, 50, axis=0)
+    errorprob = np.nanpercentile(allprobs, 86, axis=0) - percentileprob  # only do one sided, do we think this is a problem?
+    # probcomp = make_rotated_probabilities(AllDiscSNR,criteria,COMPS)
+    return allprobs, percentileprob, errorprob
+
+
+
+
+def print_classification(DModel,criteria,radii,percentileprob,errorprob,disccomp,barcomp,knotcomp):
+
+    minrad,maxrad = radii[0],radii[1]
+
+    DModel['discprob'] = np.zeros(DModel['x'].size)
+    DModel['ediscprob'] = np.zeros(DModel['x'].size)
+
+    if disccomp>=0:
+        DModel['discprob'][criteria] = percentileprob[:,disccomp]
+        DModel['ediscprob'][criteria] = errorprob[:,disccomp]
+
+
+    DModel['barprob'] = np.zeros(DModel['x'].size)
+    DModel['ebarprob'] = np.zeros(DModel['x'].size)
+
+    if barcomp>=0:
+        DModel['barprob'][criteria] = percentileprob[:,barcomp]
+        DModel['ebarprob'][criteria] = errorprob[:,barcomp]
+
+
+    DModel['knotprob'] = np.zeros(DModel['x'].size)
+    DModel['eknotprob'] = np.zeros(DModel['x'].size)
+
+    if knotcomp>=0:
+        DModel['knotprob'][criteria] = percentileprob[:,knotcomp]
+        DModel['eknotprob'][criteria] = errorprob[:,knotcomp]
+
+
+    # combine knot,bar
+    #DModel['barprob'] = np.zeros(DModel['x'].size)
+    #DModel['barprob'][criteria] = percentileprob[:,1]+percentileprob[:,0]
+
+    #DModel['knotprob'] = np.zeros(DModel['x'].size)
+    #DModel['knotprob'][criteria] = 0.
+
+    f = open('data/apogee/classifications/3Component_AllFeHCutMembership_Percentiles_reduceSNR_r{}R{}_cyl.csv'.format(minrad,maxrad),'w')
+
+    print('APOGEE_ID, P_knot, s_knot, P_bar, s_bar, P_disc, s_disc, X, Y, Z, Lx, Ly, Lz',file=f)
+
+    for i in range(0,len(DModel['barprob'])):
+        #if (DModel['barprob'][i] > 0.7) | (DModel['discprob'][i] > 0.7) | (DModel['knotprob'][i] > 0.7):
+
+        # print all regardless
+        if (DModel['barprob'][i] + DModel['discprob'][i] + DModel['knotprob'][i]) > 0.7:
+            print(DModel['apogee_id'][i],',',DModel['knotprob'][i],',',DModel['eknotprob'][i],',',DModel['barprob'][i],',',DModel['ebarprob'][i],',',DModel['discprob'][i],',',DModel['ediscprob'][i],',',\
+                  DModel['x'][i],',',DModel['y'][i],',',DModel['z'][i],',',\
+                        DModel['Lx'][i],',',DModel['Ly'][i],',',DModel['Lz'][i],file=f)
+
+    f.close()
