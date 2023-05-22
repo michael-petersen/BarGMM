@@ -4,3 +4,5 @@
 
 # python files
 src/__pycache__
+
+*.smhist
