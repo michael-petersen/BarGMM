@@ -26,15 +26,9 @@ import scipy
 from src.localtools import *
 from src.fitmanagement import *
 
-mockn = "APOGEE_all_fehcut_reduceSNR"
-
-# what are the (hand-defined) components?
-comptag = dict()
-comptag[0] = [-1,1,2]#['bar','disc','knot']
-comptag[1] = [1,0,2]#['disc','bar','knot']
-comptag[2] = [1,-1,0]#['disc','-','bar']
-comptag[3] = [-1,-1,1]#['-','-','disc']
-comptag[4] = [-1,-1,1]#['-','-','disc']
+# read in the model that you want
+from models.apogee import *
+#from models.bulgemock import *
 
 
 #         bar    disc   knot
@@ -54,8 +48,6 @@ ax3 = fig.add_axes([xmin+2*dx,ymin+0*dy,dx,dy])
 ax = [ax1,ax2,ax3]
 
 
-
-
 # this is the angular momentum loop (lz-lx, lz-ly, ly-lx)
 for iband,band in enumerate([[3,1],[3,2],[2,1]]):
     print(band[0],band[1])
@@ -64,7 +56,7 @@ for iband,band in enumerate([[3,1],[3,2],[2,1]]):
     for irad,rads in enumerate([[0,1],[1,2],[2,3],[3,4],[4,5]]):
         minrad,maxrad = rads[0],rads[1]
 
-        directory = "data/apogee/fits/{0}_d{1:02d}{2:02d}".format(mockn,minrad,maxrad)
+        directory = inputdir+"fits/{0}_d{1:02d}{2:02d}".format(modeltag,minrad,maxrad)
         inputfile = directory+'/chains/gaussian-post_equal_weights.dat'
 
         COMPS,CStats = make_posterior_list_three_rotation_sorted(inputfile)
@@ -72,7 +64,7 @@ for iband,band in enumerate([[3,1],[3,2],[2,1]]):
         # loop through the components
         for cnum in [0,1,2]:
 
-            ccnum = comptag[irad][cnum]
+            ccnum = complist[irad][cnum]
             if ccnum < 0: continue
 
             aellipse,bellipse,color = COMPS[cnum][band[0]+3]**0.5,COMPS[cnum][band[1]+3]**0.5,cband[ccnum]
@@ -118,9 +110,4 @@ ax1.text(-900,900,'Lz-Lx',color='black',va='top',ha='left')
 ax2.text(-900,900,'Lz-Ly',color='black',va='top',ha='left')
 ax3.text(-900,900,'Ly-Lx',color='black',va='top',ha='left')
 
-
-#ax2.set_title('{0}<r<{1} kpc ([Fe/H]>-0.4)'.format(minrad,maxrad))
-
-
-
-plt.savefig('figures/ellipseplot.png',dpi=300)
+plt.savefig('figures/ellipseplot_{}.png'.format(modelname),dpi=300)

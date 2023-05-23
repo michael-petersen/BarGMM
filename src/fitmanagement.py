@@ -642,7 +642,7 @@ def make_all_probabilities(data, criteria, CStats, nchains=100):
 
 
 
-def print_classification(DModel,criteria,radii,percentileprob,errorprob,disccomp,barcomp,knotcomp):
+def print_classification(DModel,criteria,radii,percentileprob,errorprob,disccomp,barcomp,knotcomp,printdir):
 
     minrad,maxrad = radii[0],radii[1]
 
@@ -677,7 +677,7 @@ def print_classification(DModel,criteria,radii,percentileprob,errorprob,disccomp
     #DModel['knotprob'] = np.zeros(DModel['x'].size)
     #DModel['knotprob'][criteria] = 0.
 
-    f = open('data/apogee/classifications/3Component_AllFeHCutMembership_Percentiles_reduceSNR_r{}R{}_cyl.csv'.format(minrad,maxrad),'w')
+    f = open(printdir+'/3Component_AllFeHCutMembership_Percentiles_reduceSNR_r{}R{}_cyl.csv'.format(minrad,maxrad),'w')
 
     print('APOGEE_ID, P_knot, s_knot, P_bar, s_bar, P_disc, s_disc, X, Y, Z, Lx, Ly, Lz',file=f)
 

@@ -6,3 +6,7 @@
 src/__pycache__
 
 *.smhist
+
+models/__pycache__
+
+figures/*
