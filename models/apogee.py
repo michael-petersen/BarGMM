@@ -22,10 +22,24 @@ compnum[3] = [2,-1,-1]
 compnum[4] = [2,-1,-1]
 
 # for ellipse tracing
-# by [bar,disc,knot], which component is which?
+# by [bar,disc,knot], which component is which index?
 complist = dict()
-complist[0] = [0,1,2]#['bar','disc','knot']
-complist[1] = [1,0,2]#['disc','bar','knot']
-complist[2] = [1,-1,0]#['disc','-','bar']
-complist[3] = [-1,-1,1]#['-','-','disc']
-complist[4] = [-1,-1,1]#['-','-','disc']
+complist[0] = [0,1,2]
+complist[1] = [1,0,2]
+complist[2] = [1,-1,0]
+complist[3] = [-1,-1,1]
+complist[4] = [-1,-1,1]
+
+
+# half-integer bins
+comptag[5] = ['disc','bar','knot']
+comptag[15] = ['-','-','bar']
+comptag[25] = ['-','disc','bar']
+
+compnum[5] = [0,1,2]
+compnum[15] = [-1,2,-1]
+compnum[25] = [1,2,-1]
+
+complist[5] = [1,0,2]
+complist[15] = [2,-1,-1]
+complist[25] = [2,1,-1]
