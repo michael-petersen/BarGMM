@@ -24,9 +24,9 @@ import scipy
 from src.localtools import *
 from src.fitmanagement import *
 
-#from models.apogee import *
+from models.apogee import *
 #from models.bulgemock import *
-from models.barmock import *
+#from models.barmock import *
 
 AllDiscSNR = read_mock_file(datafile)
 
@@ -48,6 +48,9 @@ pltkeys = ['f','Lz','Lx', 'Ly','alpha','sxinv', 'syinv', 'szinv']
 
 print('{0:4s}{1:3s}{2:9s}{3:9s} {4:9s} {5:9s} {6:9s} {7:9s} {8:9s} {9:9s}'.format(' ',' ','f','Lz','Lx','Ly','alpha','sx','sy','sz'))
 
+f = open(inputdir+'fits/README.md','w')
+print('|comp|radii| f | L<sub>z</sub> | L<sub>x</sub> | L<sub>y</sub> | angle | w<sub>z</sub> | w<sub>x</sub> | w<sub>y</sub> |',file=f)
+print('|---|---|---| ---| --- | ---| --- | --- | --- | --- |',file=f)
 
 #for irad,rads in enumerate():
 for irad,rads in enumerate(radii):
@@ -56,17 +59,39 @@ for irad,rads in enumerate(radii):
     inputfile = directory+'/chains/gaussian-post_equal_weights.dat'
     COMPS,CStats = make_posterior_list_three_rotation_sorted(inputfile)
     print('{0:4d}-{1:1d}'.format(minrad,maxrad))
+
     for cnum in [0,1,2]:
+        print('|{0:4d}-{1:1d}'.format(minrad,maxrad),end='|',file=f)
+        print(' '+comptag[minrad][cnum],end='|',file=f)
         for key in pltkeys:
             if 'inv' in key:
-                print(' {0:9.4f}'.format(np.sqrt(1./np.nanmedian(CStats[cnum][key]))),end='')
+                median = np.sqrt(1./np.nanmedian(CStats[cnum][key]))
+                lo = np.sqrt(1./np.nanpercentile(CStats[cnum][key],14.)) - median
+                hi = np.sqrt(1./np.nanpercentile(CStats[cnum][key],86.)) - median
+                print(' {0:9.4f}'.format(median),end='')
+                print(' {0:6.1f}<sup>+{1:6.1f}</sup><sub>-{2:6.1f}</sub>'.format(median,np.abs(lo),np.abs(hi)),end='|',file=f)
             elif key=='alpha':
-                print(' {0:9.4f}'.format((180./np.pi)*np.nanmedian(CStats[cnum][key])),end='')
-            else:
-                print(' {0:9.4f}'.format(np.nanmedian(CStats[cnum][key])),end='')
+                median = (180./np.pi)*np.nanmedian(CStats[cnum][key])
+                lo = (180./np.pi)*np.nanpercentile(CStats[cnum][key],14.) - median
+                hi = (180./np.pi)*np.nanpercentile(CStats[cnum][key],86.) - median
+                print(' {0:9.4f}'.format(median),end='')
+                print(' {0:5.1f}<sup>+{1:5.1f}</sup><sub>-{2:5.1f}</sub>'.format(median,np.abs(lo),np.abs(hi)),end='|',file=f)
+            elif key=='f':
+                median = np.nanmedian(CStats[cnum][key])
+                lo = np.nanpercentile(CStats[cnum][key],14.) - median
+                hi = np.nanpercentile(CStats[cnum][key],86.) - median
+                print(' {0:9.4f}'.format(median),end='')
+                print(' {0:6.4f}<sup>+{1:6.4f}</sup><sub>-{2:6.4f}</sub>'.format(median,np.abs(lo),np.abs(hi)),end='|',file=f)
+            else: # Lx, Ly, Lz
+                median = np.nanmedian(CStats[cnum][key])
+                lo = np.nanpercentile(CStats[cnum][key],14.) - median
+                hi = np.nanpercentile(CStats[cnum][key],86.) - median
+                print(' {0:9.4f}'.format(median),end='')
+                print(' {0:6.1f}<sup>+{1:6.1f}</sup><sub>-{2:6.1f}</sub>'.format(median,np.abs(lo),np.abs(hi)),end='|',file=f)
         print(' '+comptag[minrad][cnum])
+        print('',file=f)
 
-
+f.close()
 
 # generate classifications
 if classify:
