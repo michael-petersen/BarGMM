@@ -4,6 +4,7 @@ inputdir   = 'data/apogee/'
 datafile = inputdir+"APOGEE_all_fehcut_reduceSNR_tagged.txt"
 modeltag = "APOGEE_all_fehcut_reduceSNR"
 modelname = "APOGEE"
+mockanalysis = False
 
 # what are the (hand-defined) components?
 comptag = dict()

@@ -4,6 +4,7 @@ inputdir  = 'data/bulgemock/'
 datafile  = inputdir+"ModelBarYoungBulgeMock10000.txt"
 modeltag  = "ModelBarYoungBulgeMock10000"
 modelname = 'BulgeMock'
+mockanalysis = True
 
 # what are the (hand-defined) components?
 comptag = dict()
