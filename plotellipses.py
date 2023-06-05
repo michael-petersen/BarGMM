@@ -29,6 +29,7 @@ from src.fitmanagement import *
 # read in the model that you want
 from models.apogee import *
 #from models.bulgemock import *
+#from models.barmock import *
 
 
 #         bar    disc   knot
@@ -53,7 +54,7 @@ for iband,band in enumerate([[3,1],[3,2],[2,1]]):
     print(band[0],band[1])
 
     # loop through the min/maxrad
-    for irad,rads in enumerate([[0,1],[1,2],[2,3],[3,4],[4,5]]):
+    for irad,rads in enumerate([[0,1],[1,2],[2,3],[3,4]]):#,[4,5]]):
         minrad,maxrad = rads[0],rads[1]
 
         directory = inputdir+"fits/{0}_d{1:02d}{2:02d}".format(modeltag,minrad,maxrad)

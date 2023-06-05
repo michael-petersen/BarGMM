@@ -642,7 +642,7 @@ def make_all_probabilities(data, criteria, CStats, nchains=100):
 
 
 
-def print_classification(DModel,criteria,radii,percentileprob,errorprob,disccomp,barcomp,knotcomp,printdir):
+def print_classification(DModel,criteria,radii,percentileprob,errorprob,disccomp,barcomp,knotcomp,printdir,mockanalysis):
 
     minrad,maxrad = radii[0],radii[1]
 
@@ -686,7 +686,14 @@ def print_classification(DModel,criteria,radii,percentileprob,errorprob,disccomp
 
         # print all regardless
         if (DModel['barprob'][i] + DModel['discprob'][i] + DModel['knotprob'][i]) > 0.7:
-            print(DModel['apogee_id'][i],',',DModel['knotprob'][i],',',DModel['eknotprob'][i],',',DModel['barprob'][i],',',DModel['ebarprob'][i],',',DModel['discprob'][i],',',DModel['ediscprob'][i],',',\
+            if mockanalysis:
+                if DModel['bulge'][i]==1.0:
+                    pname = -1*DModel['index'][i]
+                else:
+                    pname = DModel['index'][i]
+            else:
+                pname = DModel['apogee_id'][i]
+            print(pname,',',DModel['knotprob'][i],',',DModel['eknotprob'][i],',',DModel['barprob'][i],',',DModel['ebarprob'][i],',',DModel['discprob'][i],',',DModel['ediscprob'][i],',',\
                   DModel['x'][i],',',DModel['y'][i],',',DModel['z'][i],',',\
                         DModel['Lx'][i],',',DModel['Ly'][i],',',DModel['Lz'][i],file=f)
 

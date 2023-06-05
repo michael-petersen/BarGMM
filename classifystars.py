@@ -30,15 +30,15 @@ from models.apogee import *
 
 AllDiscSNR = read_mock_file(datafile)
 
-classify = False
+classify = True
 
 offset = False
 
 if offset:
-    radii = [[5,15],[15,25],[25,35]] # the offset bins
+    radii = [[5,15],[15,25],[25,35],[35,45]] # the offset bins
     binprefac = 0.1
 else:
-    radii = [[0,1],[1,2],[2,3],[3,4],[4,5]] # the main bins
+    radii = [[0,1],[1,2],[2,3],[3,4]]#,[4,5]] # the main bins
     binprefac = 1.0
 
 
@@ -48,9 +48,19 @@ pltkeys = ['f','Lz','Lx', 'Ly','alpha','sxinv', 'syinv', 'szinv']
 
 print('{0:4s}{1:3s}{2:9s}{3:9s} {4:9s} {5:9s} {6:9s} {7:9s} {8:9s} {9:9s}'.format(' ',' ','f','Lz','Lx','Ly','alpha','sx','sy','sz'))
 
-f = open(inputdir+'fits/README.md','w')
+# markdown version for GitHub viewing
+if offset:
+    f = open(inputdir+'fits/README.md','a')
+else:
+    f = open(inputdir+'fits/README.md','w')
 print('|comp|radii| f | L<sub>z</sub> | L<sub>x</sub> | L<sub>y</sub> | angle | w<sub>z</sub> | w<sub>x</sub> | w<sub>y</sub> |',file=f)
 print('|---|---|---| ---| --- | ---| --- | --- | --- | --- |',file=f)
+
+if offset:
+    g = open(inputdir+'fits/table.tex','a')
+else:
+    g = open(inputdir+'fits/table.tex','w')
+print('comp &radii & f & $L_z$ & $L_z$& $L_z$ & $\alpha$ & $\sigma_z$ & $\sigma_z$ & $\sigma_z$ \\\\',file=g)
 
 #for irad,rads in enumerate():
 for irad,rads in enumerate(radii):
@@ -61,35 +71,47 @@ for irad,rads in enumerate(radii):
     print('{0:4d}-{1:1d}'.format(minrad,maxrad))
 
     for cnum in [0,1,2]:
-        print('|{0:4d}-{1:1d}'.format(minrad,maxrad),end='|',file=f)
-        print(' '+comptag[minrad][cnum],end='|',file=f)
+
+        # print to markdown
+        print('|'+comptag[minrad][cnum],end='|',file=f)
+        print('{0:4d}-{1:1d}'.format(minrad,maxrad),end='|',file=f)
+
+        # print to latex
+        print(comptag[minrad][cnum],end='&',file=g)
+        print('{0:4d}-{1:1d}'.format(minrad,maxrad),end='&',file=g)
+
         for key in pltkeys:
             if 'inv' in key:
                 median = np.sqrt(1./np.nanmedian(CStats[cnum][key]))
                 lo = np.sqrt(1./np.nanpercentile(CStats[cnum][key],14.)) - median
                 hi = np.sqrt(1./np.nanpercentile(CStats[cnum][key],86.)) - median
                 print(' {0:9.4f}'.format(median),end='')
-                print(' {0:6.1f}<sup>+{1:6.1f}</sup><sub>-{2:6.1f}</sub>'.format(median,np.abs(lo),np.abs(hi)),end='|',file=f)
+                print('{0}<sup>+{1}</sup><sub>-{2}</sub>'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='|',file=f)
+                print('{0}^{{+{1}}}_{{-{2}}}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='&',file=g)
             elif key=='alpha':
                 median = (180./np.pi)*np.nanmedian(CStats[cnum][key])
                 lo = (180./np.pi)*np.nanpercentile(CStats[cnum][key],14.) - median
                 hi = (180./np.pi)*np.nanpercentile(CStats[cnum][key],86.) - median
                 print(' {0:9.4f}'.format(median),end='')
-                print(' {0:5.1f}<sup>+{1:5.1f}</sup><sub>-{2:5.1f}</sub>'.format(median,np.abs(lo),np.abs(hi)),end='|',file=f)
+                print('{0}<sup>+{1}</sup><sub>-{2}</sub>'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='|',file=f)
+                print('{0}^{{+{1}}}_{{-{2}}}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='&',file=g)
             elif key=='f':
                 median = np.nanmedian(CStats[cnum][key])
                 lo = np.nanpercentile(CStats[cnum][key],14.) - median
                 hi = np.nanpercentile(CStats[cnum][key],86.) - median
                 print(' {0:9.4f}'.format(median),end='')
-                print(' {0:6.4f}<sup>+{1:6.4f}</sup><sub>-{2:6.4f}</sub>'.format(median,np.abs(lo),np.abs(hi)),end='|',file=f)
+                print('{0}<sup>+{1}</sup><sub>-{2}</sub>'.format(np.round(median,4),np.round(np.abs(lo),4),np.round(np.abs(hi),4)),end='|',file=f)
+                print('{0}^{{+{1}}}_{{-{2}}}'.format(np.round(median,4),np.round(np.abs(lo),4),np.round(np.abs(hi),4)),end='&',file=g)
             else: # Lx, Ly, Lz
                 median = np.nanmedian(CStats[cnum][key])
                 lo = np.nanpercentile(CStats[cnum][key],14.) - median
                 hi = np.nanpercentile(CStats[cnum][key],86.) - median
                 print(' {0:9.4f}'.format(median),end='')
-                print(' {0:6.1f}<sup>+{1:6.1f}</sup><sub>-{2:6.1f}</sub>'.format(median,np.abs(lo),np.abs(hi)),end='|',file=f)
+                print('{0}<sup>+{1}</sup><sub>-{2}</sub>'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='|',file=f)
+                print('{0}^{{+{1}}}_{{-{2}}}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='&',file=g)
         print(' '+comptag[minrad][cnum])
         print('',file=f)
+        print('\\\\',file=g)
 
 f.close()
 
@@ -121,4 +143,4 @@ if classify:
         disccomp,barcomp,knotcomp = compnum[minrad]
         radii = [minrad,maxrad]
         printdir = inputdir+'classifications/'
-        print_classification(AllDiscSNR,criteria,radii,percentileprob,errorprob,disccomp,barcomp,knotcomp,printdir)
+        print_classification(AllDiscSNR,criteria,radii,percentileprob,errorprob,disccomp,barcomp,knotcomp,printdir,mockanalysis)

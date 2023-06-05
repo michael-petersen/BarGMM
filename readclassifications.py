@@ -27,8 +27,64 @@ from src.fitmanagement import *
 # read in the model that you want
 from models.apogee import *
 #from models.bulgemock import *
+#from models.barmock import *
 
 AllDiscSNR = read_mock_file(datafile)
+
+# for the mocks, do a check against reality
+
+if mockanalysis:
+
+    fig = plt.figure(figsize=(6,6),facecolor='white')
+
+    xmin = 0.1
+    ymin = 0.1
+    dx = 0.8
+    dy = 0.8
+    ax1 = fig.add_axes([xmin+0*dx,ymin+0*dy,dx,dy])
+
+    for irad,rads in enumerate([[0,1],[1,2],[2,3],[3,4]]):
+        print('\n',rads)
+        # get the min/max cylindrical radii in kpc
+        minrad,maxrad = rads[0],rads[1]
+
+        # define the stars we want the classifications for
+        criteria = np.where((AllDiscSNR['R']>(minrad)) & (AllDiscSNR['R']<(maxrad)))[0]
+
+        # read the classifications
+        A = np.genfromtxt(inputdir+'classifications/3Component_AllFeHCutMembership_Percentiles_reduceSNR_r{}R{}_cyl.csv'.format(minrad,maxrad),skip_header=1,delimiter=',')
+
+        pknot = A[:,1]
+        pbar  = A[:,3]
+        pdisc = A[:,5]
+
+        ax1.scatter(pknot,A[:,12],facecolor='black',edgecolor='none',s=1.)
+
+        yesbulge = (A[:,0] < 0)
+        totalsample = pknot.size
+        failedbulgetype1 = (np.where(pknot[yesbulge]<0.5)[0].size)/totalsample
+        failedbulgetype2 = (np.where(pknot[~yesbulge]>0.5)[0].size)/totalsample
+        print('type1error={0:4.3f}, type2error={1:4.3f}'.format(failedbulgetype1,failedbulgetype2))
+        ax1.scatter(pknot[yesbulge],A[yesbulge,12],facecolor='red',edgecolor='none',s=1.)
+
+        pindicies = A[:,0].astype('int')
+        lessthan100k = np.where((pindicies < 100000) & (pindicies > 0))[0]
+        print('trapping eligible={}'.format(lessthan100k.size))
+
+        # now, we need the indices of the stars below 100k
+        lessthan100kind = pindicies[lessthan100k]
+
+
+        trapped = (trapping_array[0][:,1000][lessthan100kind]+trapping_array[2][:,1000][lessthan100kind])
+        print('true bar sum={}'.format(np.where(trapped==1)[0].size))
+        print('mean CORRECT bar  classification={0:4.3f} ({1})'.format(np.nanmedian(pbar[np.where(trapped==1)[0]]),np.where(trapped==1)[0].size))
+        print('mean WRONG   bar  classification={0:4.3f} ({1})'.format(np.nanmedian(pdisc[np.where(trapped==1)[0]]),np.where(trapped==1)[0].size))
+        print('mean CORRECT disc classification={0:4.3f} ({1})'.format(np.nanmedian(pdisc[np.where(trapped==0)[0]]),np.where(trapped==0)[0].size))
+        print('mean WRONG   disc classification={0:4.3f} ({1})'.format(np.nanmedian(pbar[np.where(trapped==0)[0]]),np.where(trapped==0)[0].size))
+
+
+    plt.savefig('figures/bulge_check.png',dpi=300)
+
 
 # set the plotting threshold
 threshold = 0.8
@@ -63,8 +119,8 @@ for component in ['bar','disc','knot']:
 
         # this tracks how many stars had failed classifications
         # failed classifications means they were assigned to nonsense components that were not tracked
-        print('classification size',A[:,0].size)
-        print('criteria size',AllDiscSNR['l'][criteria].size)
+        #print('classification size',A[:,0].size)
+        #print('criteria size',AllDiscSNR['l'][criteria].size)
 
         # plot all data as background
         ax1.scatter(A[:,7],A[:,8],color='grey',s=0.5,zorder=-99)
@@ -134,8 +190,8 @@ for component in ['bar','disc','knot']:
 
         # this tracks how many stars had failed classifications
         # failed classifications means they were assigned to nonsense components that were not tracked
-        print('classification size',A[:,0].size)
-        print('criteria size',AllDiscSNR['l'][criteria].size)
+        #print('classification size',A[:,0].size)
+        #print('criteria size',AllDiscSNR['l'][criteria].size)
 
         # plot all data as background
         ax1.scatter(A[:,10],A[:,11],color='grey',s=0.5,zorder=-99) # Lx-Ly
