@@ -30,9 +30,9 @@ from models.apogee import *
 
 AllDiscSNR = read_mock_file(datafile)
 
-classify = True
+classify = False
 
-offset = False
+offset = True
 
 if offset:
     radii = [[5,15],[15,25],[25,35],[35,45]] # the offset bins
