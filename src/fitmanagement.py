@@ -323,7 +323,7 @@ def make_probabilities(Mock,good,COMPS,nanprint=False):
             exd = ex + COMPS[comp][4] # components are already squared
             eyd = ey + COMPS[comp][5]
             ezd = ez + COMPS[comp][6]
-            ex,ey,ez = np.sqrt(ex),np.sqrt(ez),np.sqrt(ez)
+            ex,ey,ez = np.sqrt(ex),np.sqrt(ey),np.sqrt(ez)
 
             Cf = np.zeros_like(Cn)
             Cf[0][0],Cf[0][1],Cf[0][2] = exd           ,ex*ey*Cn[0][1],ex*ez*Cn[0][2]
@@ -382,7 +382,7 @@ def make_probabilities(Mock,good,COMPS,nanprint=False):
 
 
 
-def make_rotated_probabilities(Mock,good,COMPS,nanprint=False):
+def make_rotated_probabilities(Mock,good,COMPS,nanprint=False,nonorm=False):
     """
     Mock
     good
@@ -422,20 +422,21 @@ def make_rotated_probabilities(Mock,good,COMPS,nanprint=False):
             inputx = Mock['eLx'][indx]
             inputy = Mock['eLy'][indx]
 
-            Cn = np.corrcoef(np.array([inputx,inputy,Mock['eLz'][indx]])) # this will give the corrcoefs
+            Cf = np.cov(np.array([inputx,inputy,Mock['eLz'][indx]])) # is this all I need?
 
-            C = np.cov(np.array([inputx,inputy,Mock['eLz'][indx]])) # is this all I need?
-            ex,ey,ez = np.diag(C) # get the individual data values
+            #Cn = np.corrcoef(np.array([inputx,inputy,Mock['eLz'][indx]])) # this will give the corrcoefs
+            #C = np.cov(np.array([inputx,inputy,Mock['eLz'][indx]])) # is this all I need?
+            #ex,ey,ez = np.diag(C) # get the individual data values
 
-            exd = ex# + COMPS[comp][4] # components are already squared
-            eyd = ey# + COMPS[comp][5]
-            ezd = ez# + COMPS[comp][6]
-            ex,ey,ez = np.sqrt(ex),np.sqrt(ez),np.sqrt(ez)
+            #exd = ex# + COMPS[comp][4] # components are already squared
+            #eyd = ey# + COMPS[comp][5]
+            #ezd = ez# + COMPS[comp][6]
+            #ex,ey,ez = np.sqrt(ex),np.sqrt(ey),np.sqrt(ez)
 
-            Cf = np.zeros_like(Cn)
-            Cf[0][0],Cf[0][1],Cf[0][2] = exd   ,ex*ey*Cn[0][1],ex*ez*Cn[0][2]
-            Cf[1][0],Cf[1][1],Cf[1][2] = ey*ex*Cn[1][0],eyd   ,ey*ez*Cn[1][2]
-            Cf[2][0],Cf[2][1],Cf[2][2] = ez*ex*Cn[2][0],ez*ey*Cn[2][1],ezd
+            #Cf = np.zeros_like(Cn)
+            #Cf[0][0],Cf[0][1],Cf[0][2] = exd   ,ex*ey*Cn[0][1],ex*ez*Cn[0][2]
+            #Cf[1][0],Cf[1][1],Cf[1][2] = ey*ex*Cn[1][0],eyd   ,ey*ez*Cn[1][2]
+            #Cf[2][0],Cf[2][1],Cf[2][2] = ez*ex*Cn[2][0],ez*ey*Cn[2][1],ezd
 
             #Cf = (C**2)/Cn
 
@@ -446,7 +447,11 @@ def make_rotated_probabilities(Mock,good,COMPS,nanprint=False):
             Cf[1][1] += c22m
             Cf[2][2] += c33m
 
-            covdet = np.abs(np.linalg.det(Cf))
+            # we are gettinng bad values here
+            # one option is log determinant, e.g. https://numpy.org/doc/stable/reference/generated/numpy.linalg.slogdet.html#numpy.linalg.slogdet
+            (signCf, logdetCf) = np.linalg.slogdet(Cf)
+            covdet = np.abs(signCf * np.exp(logdetCf))
+            #covdet = np.abs(np.linalg.det(Cf))
             covinv = np.linalg.inv(Cf)
 
             ldiff = np.array([Mock['Lx'][indx] - dlxm,
@@ -491,8 +496,9 @@ def make_rotated_probabilities(Mock,good,COMPS,nanprint=False):
     # complete the normalisation on a per-star basis
     compsums = np.nansum(probcomp,axis=1)
 
-    for compnum,comp in enumerate(COMPS.keys()):
-        probcomp[:,compnum] /= compsums
+    if not nonorm:
+        for compnum,comp in enumerate(COMPS.keys()):
+            probcomp[:,compnum] /= compsums
 
     # return array of probabilities
     return probcomp
@@ -610,7 +616,7 @@ def cstats_to_comps(CStats, indx):
 
     return COMPS
 
-def make_all_probabilities(data, criteria, CStats, nchains=100):
+def make_all_probabilities(data, criteria, CStats, nchains=100, nanprint=False, nonorm=False):
     """
     Computes all probabilities based on given data, criteria, and cstats.
 
@@ -626,16 +632,19 @@ def make_all_probabilities(data, criteria, CStats, nchains=100):
     """
     # nchains = 100#CStats[0]['f'].size
     nstars = criteria.size
-    print(nstars, np.nanmedian(data['R'][criteria]))
+    print("Number of stars: {0}, with median R={1:4.3f}".format(nstars, np.nanmedian(data['R'][criteria])))
 
     allprobs = np.zeros([nchains, nstars, 3])
 
     for indx in range(0, nchains):
         Cout = cstats_to_comps(CStats, indx)
-        allprobs[indx] = make_rotated_probabilities(data, criteria, Cout)  # make_probabilities(AllDiscSNR, criteria, Cout)
+        allprobs[indx] = make_rotated_probabilities(data, criteria, Cout,nanprint=nanprint,nonorm=nonorm)  # make_probabilities(AllDiscSNR, criteria, Cout)
 
     percentileprob = np.nanpercentile(allprobs, 50, axis=0)
-    errorprob = np.nanpercentile(allprobs, 86, axis=0) - percentileprob  # only do one sided, do we think this is a problem?
+    errorprob1 = np.nanpercentile(allprobs, 86, axis=0) - percentileprob
+    errorprob2 = percentileprob - np.nanpercentile(allprobs, 14, axis=0)
+    errorprob = np.nanmax([errorprob1,errorprob2],axis=0) # choose whichever side is more uncertain
+
     # probcomp = make_rotated_probabilities(AllDiscSNR,criteria,COMPS)
     return allprobs, percentileprob, errorprob
 
