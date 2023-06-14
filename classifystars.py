@@ -102,7 +102,7 @@ if offset:
     h = open(inputdir+'fits/table.csv','a')
 else:
     h = open(inputdir+'fits/table.csv','w')
-    print('comp,minradii,maxrad,f,f-,f+,Lx,Lx-,Lx+,Ly,Ly-,Ly+,Lz,Lz-,Lz+,alpha,alpha-,alpha+,sigmax,sigmax-,sigmax+,sigmay,sigmay-,sigmay+,sigmaz,sigmaz-,sigmaz+,',file=h)
+    print('comp,binmin,binmax,starmed,starmed-,starmed+,f,f-,f+,Lx,Lx-,Lx+,Ly,Ly-,Ly+,Lz,Lz-,Lz+,alpha,alpha-,alpha+,sigmax,sigmax-,sigmax+,sigmay,sigmay-,sigmay+,sigmaz,sigmaz-,sigmaz+,',file=h)
 
 #for irad,rads in enumerate():
 for irad,rads in enumerate(radii):
@@ -111,6 +111,8 @@ for irad,rads in enumerate(radii):
     inputfile = directory+'/chains/gaussian-post_equal_weights.dat'
     COMPS,CStats = make_posterior_list_three_rotation_sorted(inputfile)
     print('{0:2.1f}-{1:2.1f}'.format(np.round(binprefacs[irad]*minrad,1),np.round(binprefacs[irad]*maxrad,1)))
+
+    criteria = np.where((AllDiscSNR['R']>(binprefacs[irad]*minrad)) & (AllDiscSNR['R']<(binprefacs[irad]*maxrad)))[0]
 
     for cnum in [0,1,2]:
 
@@ -125,6 +127,7 @@ for irad,rads in enumerate(radii):
         # print to csv
         print(comptag[minrad][cnum],end=',',file=h)
         print('{0:2.1f},{1:2.1f}'.format(np.round(binprefacs[irad]*minrad,1),np.round(binprefacs[irad]*maxrad,1)),end=',',file=h)
+        print('{0:3.2f},{1:3.2f},{2:3.2f}'.format(np.nanmedian(AllDiscSNR['R'][criteria]),np.nanpercentile(AllDiscSNR['R'][criteria],14.),np.nanpercentile(AllDiscSNR['R'][criteria],86.)),end=',',file=h)
 
         for ikey,key in enumerate(pltkeys):
             if 'inv' in key:
