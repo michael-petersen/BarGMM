@@ -7,8 +7,13 @@ inputdir   = 'data/apogee/'
 #datafile = inputdir+"APOGEE_all_fehcut_reduceSNR_tagged.txt"
 #modeltag = "APOGEE_all_fehcut_reduceSNR"
 
-datafile = inputdir+"APOGEE_all_feh6_SNRb_tagged.txt"
-modeltag = "APOGEE_all_feh6_SNRb"
+# https://github.com/michael-petersen/BarGMM/commit/dee2f4bcdd3e82e833a27616d74e3348786fe8fe
+#modeltag = "APOGEE_all_feh6_SNRb"
+#datafile = inputdir+"APOGEE_all_feh6_SNRb_tagged.txt"
+
+modeltag = "APOGEE_all_feh6_SNRc"
+datafile = inputdir+modeltag+"_tagged.txt"
+
 
 modelname = "APOGEE"
 mockanalysis = False
@@ -17,7 +22,7 @@ mockanalysis = False
 comptag = dict()
 comptag[0] = ['disc','bar','knot']
 comptag[1] = ['disc','bar','knot']
-comptag[2] = ['disc','-','bar']
+comptag[2] = ['disc','bar','knot']
 comptag[3] = ['disc','bar','-']
 
 # for classifying
@@ -25,7 +30,7 @@ comptag[3] = ['disc','bar','-']
 compnum = dict()
 compnum[0] = [0,1,2]
 compnum[1] = [0,1,2]
-compnum[2] = [0,2,-1]
+compnum[2] = [0,1,2]
 compnum[3] = [0,1,-1]
 
 # for ellipse tracing
@@ -34,22 +39,22 @@ compnum[3] = [0,1,-1]
 complist = dict()
 complist[0] = [1,0,2]
 complist[1] = [1,0,2]
-complist[2] = [1,-1,0]
+complist[2] = [1,0,2]
 complist[3] = [1,0,-1]
 
 
 # half-integer bins
 comptag[5] = ['disc','bar','knot']
 comptag[15] = ['disc','bar','knot']
-comptag[25] = ['disc','-','bar']
+comptag[25] = ['disc','bar','-']
 comptag[35] = ['-','-','disc']
 
 compnum[5] = [0,1,2]
 compnum[15] = [0,1,2]
-compnum[25] = [0,2,-1]
+compnum[25] = [0,1,-1]
 compnum[35] = [2,-1,-1]
 
 complist[5] = [1,0,2]
 complist[15] = [1,0,2]
-complist[25] = [1,-1,0]
+complist[25] = [1,0,-1]
 complist[35] = [-1,-1,0]

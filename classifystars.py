@@ -3,6 +3,9 @@
 import numpy as np
 from numpy.linalg import eig, inv
 
+# printing imports
+import h5py
+
 # plotting elements
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -11,16 +14,16 @@ mpl.rcParams['font.weight'] = 'medium';mpl.rcParams['xtick.labelsize'] = 10;mpl.
 plt.ion()
 
 
-# exptool imports
-from exptool.utils import kde_3d
-from exptool.analysis import pattern
-from exptool.observables import transform
-from exptool.io import particle
+# exptool imports: only for mock-making
+#from exptool.utils import kde_3d
+#from exptool.analysis import pattern
+#from exptool.observables import transform
+#from exptool.io import particle
 
-import scipy.interpolate as interpolate
-from scipy.interpolate import interp1d
-from scipy.interpolate import UnivariateSpline
-import scipy
+#import scipy.interpolate as interpolate
+#from scipy.interpolate import interp1d
+#from scipy.interpolate import UnivariateSpline
+#import scipy
 
 
 from src.localtools import *
@@ -30,11 +33,11 @@ from models.apogee import *
 #from models.bulgemock import *
 #from models.barmock import *
 
-AllDiscSNR = read_mock_file(datafile)
+Stars = read_mock_file(datafile)
 
 # classifications should be converted into hdf5 objects
 
-classify = False
+classify = True
 
 offset = False
 
@@ -112,7 +115,7 @@ for irad,rads in enumerate(radii):
     COMPS,CStats = make_posterior_list_three_rotation_sorted(inputfile)
     print('{0:2.1f}-{1:2.1f}'.format(np.round(binprefacs[irad]*minrad,1),np.round(binprefacs[irad]*maxrad,1)))
 
-    criteria = np.where((AllDiscSNR['R']>(binprefacs[irad]*minrad)) & (AllDiscSNR['R']<(binprefacs[irad]*maxrad)))[0]
+    criteria = np.where((Stars['R']>(binprefacs[irad]*minrad)) & (Stars['R']<(binprefacs[irad]*maxrad)))[0]
 
     for cnum in [0,1,2]:
 
@@ -127,7 +130,7 @@ for irad,rads in enumerate(radii):
         # print to csv
         print(comptag[minrad][cnum],end=',',file=h)
         print('{0:2.1f},{1:2.1f}'.format(np.round(binprefacs[irad]*minrad,1),np.round(binprefacs[irad]*maxrad,1)),end=',',file=h)
-        print('{0:3.2f},{1:3.2f},{2:3.2f}'.format(np.nanmedian(AllDiscSNR['R'][criteria]),np.nanpercentile(AllDiscSNR['R'][criteria],14.),np.nanpercentile(AllDiscSNR['R'][criteria],86.)),end=',',file=h)
+        print('{0:3.2f},{1:3.2f},{2:3.2f}'.format(np.nanmedian(Stars['R'][criteria]),np.nanpercentile(Stars['R'][criteria],14.),np.nanpercentile(Stars['R'][criteria],86.)),end=',',file=h)
 
         for ikey,key in enumerate(pltkeys):
             if 'inv' in key:
@@ -163,15 +166,16 @@ for irad,rads in enumerate(radii):
                 print('{0}^{{+{1}}}_{{-{2}}}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='&',file=g)
                 print('{0},-{2},+{1}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end=',',file=h)
 
+            radval = np.nanmedian(Stars['R'][criteria])
             if comptag[minrad][cnum]=='bar':
-                axlist[ikey].plot([maxrad,maxrad],[median+lo,median+hi],color='black')
-                axlist[ikey].scatter(maxrad,median,marker='x',edgecolor='none',facecolor='black')
+                axlist[ikey].plot([radval,radval],[median+lo,median+hi],color='black')
+                axlist[ikey].scatter(radval,median,marker='x',edgecolor='none',facecolor='black')
             elif comptag[minrad][cnum]=='disc':
-                axlist[ikey].plot([maxrad,maxrad],[median+lo,median+hi],color='blue')
-                axlist[ikey].scatter(maxrad,median,marker='x',edgecolor='none',facecolor='blue')
+                axlist[ikey].plot([radval,radval],[median+lo,median+hi],color='blue')
+                axlist[ikey].scatter(radval,median,marker='x',edgecolor='none',facecolor='blue')
             elif comptag[minrad][cnum]=='knot':
-                axlist[ikey].plot([maxrad,maxrad],[median+lo,median+hi],color='red')
-                axlist[ikey].scatter(maxrad,median,marker='x',edgecolor='none',facecolor='red')
+                axlist[ikey].plot([radval,radval],[median+lo,median+hi],color='red')
+                axlist[ikey].scatter(radval,median,marker='x',edgecolor='none',facecolor='red')
         print(' '+comptag[minrad][cnum])
         print('',file=f)
         print('\\\\',file=g)
@@ -183,9 +187,9 @@ for ax in axlist:
     ax.tick_params(axis="both",direction="in",which="both")
 
 ax1.axis([0.,5.,0.,1.])
-ax2.axis([0.,5.,-700,100.])
+ax2.axis([0.,5.,-50,50.])
 ax3.axis([0.,5.,-50,50.])
-ax4.axis([0.,5.,-50,50.])
+ax4.axis([0.,5.,-700,100.])
 ax5.axis([0.,5.,0.,90.])
 ax6.axis([0.,5.,0.,220.])
 ax7.axis([0.,5.,0.,220.])
@@ -216,17 +220,40 @@ if classify:
         COMPS,CStats = make_posterior_list_three_rotation_sorted(inputfile)
 
         # define the stars we want to classify
-        #criteria = np.where((AllDiscSNR['R']>(minrad)) & (AllDiscSNR['R']<(maxrad)))[0]
-        criteria = np.where((AllDiscSNR['R']>(binprefac*minrad)) & (AllDiscSNR['R']<(binprefac*maxrad)))[0]
+        #criteria = np.where((Stars['R']>(minrad)) & (Stars['R']<(maxrad)))[0]
+        criteria = np.where((Stars['R']>(binprefacs[irad]*minrad)) & (Stars['R']<(binprefacs[irad]*maxrad)))[0]
 
         # do the probabilistic classification
         # allprobs is the full set of classifications
         # percentileprob is the 50h percentile
         # errorprob is the 1-sigma error on the classification
-        allprobs,percentileprob,errorprob = make_all_probabilities(AllDiscSNR,criteria,CStats,nchains=100)
+        allprobs,percentileprob,errorprob = make_all_probabilities(Stars,criteria,CStats,nchains=20)
+
+
+        # which component is which?
+        disccomp,barcomp,knotcomp = compnum[minrad]
+
+        if minrad==0:
+            f = h5py.File(inputdir+"classifications/AllClassifications.h5","w")
+
+        nsamples = 20
+        for indx,starnum in enumerate(criteria):
+            probabilities = np.zeros([nsamples,4]) # always disc, bar, knot, [x,y,z,Lx,Ly,Lz]
+            if disccomp>=0: probabilities[:,0] = allprobs[:,indx,disccomp]
+            if barcomp>=0:  probabilities[:,1] = allprobs[:,indx,barcomp]
+            if knotcomp>=0: probabilities[:,2] = allprobs[:,indx,knotcomp]
+            probabilities[0:7,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum]]
+            if binprefacs[irad] > 0.5:
+                dset = f.create_dataset(Stars['apogee_id'][starnum], data=probabilities)
+            else:
+                dset = f.create_dataset(Stars['apogee_id'][starnum]+b'*', data=probabilities)
+
+
+        if minrad==35: f.close()
+
+
 
         # print the classification
-        disccomp,barcomp,knotcomp = compnum[minrad]
-        radii = [minrad,maxrad]
-        printdir = inputdir+'classifications/'
-        print_classification(AllDiscSNR,criteria,radii,percentileprob,errorprob,disccomp,barcomp,knotcomp,printdir,mockanalysis)
+        #radii = [minrad,maxrad]
+        #printdir = inputdir+'classifications/'
+        #print_classification(Stars,criteria,radii,percentileprob,errorprob,disccomp,barcomp,knotcomp,printdir,mockanalysis)
