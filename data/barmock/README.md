@@ -6,6 +6,7 @@ This mock file is the bar 'growth phase' snapshot from the cusp halo model of Pe
  - The pattern speed of the model is 37.5 in virial units, or 25.5 km/s/kpc. This is modestly lower than estimates for the MW.
  - To estimate bar membership, I took 10 snapshots on either side of the exact time and used the classification from PWK21 to provide an estimate from 0-20 of whether the orbit is a member of the bar. A reasonable threshold might be 10.  
  - The bar was rotated by -12 degrees. This corresponds to an expected alpha fit of 78 degrees. We also expect then to see much larger x velocity dispersions compared to y velocity dispersions.
+ - The trapped component of the bar ends at approximately 3 kpc in physical units (though the apparent length of the bar is much longer, see Petersen, Weinberg, Katz [2023]).
  - We cannot reliably classify any individual star (that is, we cannot provide a $p>0.8$ estimate for most stars). Instead, our validation asks how well we can recover the mean of the distributions.
 
 ![Figure 1](angularmomentum_diagnostic.png "Lz Diagnostic"), shows angular momentum vs the square of the radius. The model for the bar is shown in black, while the angular momentum of the circular orbit at each radius is shown in blue. We estimated the angular momentum two different ways: the solid curve extracts the true potential in the $z=0$ plane to measure the circular velocity, while the dashed curve is an estimate for the circular velocity from a spherical mass enclosed measurement.
