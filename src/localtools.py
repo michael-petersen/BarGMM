@@ -299,3 +299,58 @@ def rotate_galactic(a,d,rotmat=return_gaia_Agprime()):
     b = np.arctan2(rgal[2],np.sqrt(rgal[0]*rgal[0]+rgal[1]*rgal[1]))
 
     return ell,b
+
+
+
+
+def print_data(catalog,filename,criteria1):
+
+    f = open(filename,'w')
+
+    print("{0:10s} {1:10s} {2:7s} {3:7s} {4:7s} {5:7s} {6:7s} {7:7s} {8:7s} {9:9s} {10:9s} {11:7s} {12:7s} {13:7s} {14:7s} {15:7s} {16:7s}".format(
+                       'l[deg]','b[deg]', 'dist[kpc]','edist[kpc]',
+                       'pml[masyr]','epml[masyr]', 'pmb[masyr]', 'epmb[masyr]', 'pmlpmbcorr[]','vlos[kms]', 'evlos[kms]',
+                       'apogee[0,1]', 'component[0,1]','feh[dex]', 'alpha[dex]', 'age[]', 'index'),file=f)
+
+    nsources = len(catalog['l'][criteria1])
+
+    for i in range(0,nsources):
+        print("{0:10.6f} {1:10.6f} {2:7.4f} {3:7.4f} {4:7.4f} {5:7.4f} {6:7.4f} {7:7.4f} {8:7.4f} {9:9.4f} {10:9.4f} {11:7.4f} {12:7.4f} {13:7.4f} {14:7.4f} {15:7.4f} {16:7.4f}".format(
+                       catalog['ldeg'][criteria1][i],catalog['bdeg'][criteria1][i],
+                       catalog['d'][criteria1][i],catalog['edist'][criteria1][i],
+                       catalog['pml'][criteria1][i],catalog['epml'][criteria1][i],
+                       catalog['pmb'][criteria1][i],catalog['epmb'][criteria1][i],
+                       catalog['pmlpmbcorr'][criteria1][i],
+                       catalog['vlos'][criteria1][i],catalog['evlos'][criteria1][i],
+                       catalog['apogee'][criteria1][i],catalog['comp'][criteria1][i],
+                       catalog['feh'][criteria1][i],catalog['alpha'][criteria1][i],
+                       catalog['age'][criteria1][i],catalog['index'][criteria1][i]),file=f)
+
+    f.close()
+
+
+
+def print_data_with_tags(catalog,filename,criteria1):
+
+    f = open(filename,'w')
+
+    print("{0:10s} {1:10s} {2:7s} {3:7s} {4:7s} {5:7s} {6:7s} {7:7s} {8:7s} {9:9s} {10:9s} {11:7s} {12:7s} {13:7s} {14:7s} {15:7s} {16:7s} {17:20s}".format(
+                       'l[deg]','b[deg]', 'dist[kpc]','edist[kpc]',
+                       'pml[masyr]','epml[masyr]', 'pmb[masyr]', 'epmb[masyr]', 'pmlpmbcorr[]','vlos[kms]', 'evlos[kms]',
+                       'apogee[0,1]', 'component[0,1]','feh[dex]', 'alpha[dex]', 'age[]', 'index','apogeeID'),file=f)
+
+    nsources = len(catalog['l'][criteria1])
+
+    for i in range(0,nsources):
+        print("{0:10.6f} {1:10.6f} {2:7.4f} {3:7.4f} {4:7.4f} {5:7.4f} {6:7.4f} {7:7.4f} {8:7.4f} {9:9.4f} {10:9.4f} {11:7.4f} {12:7.4f} {13:7.4f} {14:7.4f} {15:7.4f} {16:7.4f} {17:20s}".format(
+                       catalog['ldeg'][criteria1][i],catalog['bdeg'][criteria1][i],
+                       catalog['d'][criteria1][i],catalog['edist'][criteria1][i],
+                       catalog['pml'][criteria1][i],catalog['epml'][criteria1][i],
+                       catalog['pmb'][criteria1][i],catalog['epmb'][criteria1][i],
+                       catalog['pmlpmbcorr'][criteria1][i],
+                       catalog['vlos'][criteria1][i],catalog['evlos'][criteria1][i],
+                       catalog['apogee'][criteria1][i],catalog['comp'][criteria1][i],
+                       catalog['feh'][criteria1][i],catalog['alpha'][criteria1][i],
+                       catalog['age'][criteria1][i],catalog['index'][criteria1][i],catalog['apogee_id'][criteria][i]),file=f)
+
+    f.close()
