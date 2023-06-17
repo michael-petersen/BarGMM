@@ -16,9 +16,9 @@ plt.ion()
 from src.localtools import *
 from src.fitmanagement import *
 
-#from models.apogee import *
+from models.apogee import *
 #from models.bulgemock import *
-from models.barmock import *
+#from models.barmock import *
 
 Stars = read_mock_file(datafile)
 
