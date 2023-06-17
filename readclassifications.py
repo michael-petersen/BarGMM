@@ -29,7 +29,26 @@ from models.apogee import *
 #from models.bulgemock import *
 #from models.barmock import *
 
-AllDiscSNR = read_mock_file(datafile)
+Stars = read_mock_file(datafile)
+
+f = h5py.File("data/apogee/classifications/AllClassifications_{}.h5".format(modeltag),"r")
+
+stride = 10
+stridecounter = 0
+for key in f.keys():
+    if (stridecounter % stride ) == 0:
+        #if f[key][0,1] > 0.8:
+        #    _ = plt.scatter(f[key][1,3],f[key][2,3],color='black',s=1.)
+        if f[key][0,0] > 0.8:
+            _ = plt.scatter(f[key][1,3],f[key][2,3],color='blue',s=1.)
+    stridecounter += 1
+
+barr = np.linspace(-3.5,3.5,100)
+plt.plot(barr*np.cos(-10*np.pi/180.),barr*np.sin(-10*np.pi/180.),color='black',lw=2.)
+plt.plot(barr*np.cos(-20*np.pi/180.),barr*np.sin(-20*np.pi/180.),color='black',lw=2.)
+plt.plot(barr*np.cos(-30*np.pi/180.),barr*np.sin(-30*np.pi/180.),color='black',lw=2.)
+
+
 
 # for the mocks, do a check against reality
 
@@ -49,7 +68,7 @@ if mockanalysis:
         minrad,maxrad = rads[0],rads[1]
 
         # define the stars we want the classifications for
-        criteria = np.where((AllDiscSNR['R']>(minrad)) & (AllDiscSNR['R']<(maxrad)))[0]
+        criteria = np.where((Stars['R']>(minrad)) & (Stars['R']<(maxrad)))[0]
 
         # read the classifications
         A = np.genfromtxt(inputdir+'classifications/3Component_AllFeHCutMembership_Percentiles_reduceSNR_r{}R{}_cyl.csv'.format(minrad,maxrad),skip_header=1,delimiter=',')
@@ -112,7 +131,7 @@ for component in ['bar','disc','knot']:
         minrad,maxrad = rads[0],rads[1]
 
         # define the stars we want the classifications for
-        criteria = np.where((AllDiscSNR['R']>(minrad)) & (AllDiscSNR['R']<(maxrad)))[0]
+        criteria = np.where((Stars['R']>(minrad)) & (Stars['R']<(maxrad)))[0]
 
         # read the classifications
         A = np.genfromtxt(inputdir+'classifications/3Component_AllFeHCutMembership_Percentiles_reduceSNR_r{}R{}_cyl.csv'.format(minrad,maxrad),skip_header=1,delimiter=',')
@@ -120,7 +139,7 @@ for component in ['bar','disc','knot']:
         # this tracks how many stars had failed classifications
         # failed classifications means they were assigned to nonsense components that were not tracked
         #print('classification size',A[:,0].size)
-        #print('criteria size',AllDiscSNR['l'][criteria].size)
+        #print('criteria size',Stars['l'][criteria].size)
 
         # plot all data as background
         ax1.scatter(A[:,7],A[:,8],color='grey',s=0.5,zorder=-99)
@@ -183,7 +202,7 @@ for component in ['bar','disc','knot']:
         minrad,maxrad = rads[0],rads[1]
 
         # define the stars we want the classifications for
-        criteria = np.where((AllDiscSNR['R']>(minrad)) & (AllDiscSNR['R']<(maxrad)))[0]
+        criteria = np.where((Stars['R']>(minrad)) & (Stars['R']<(maxrad)))[0]
 
         # read the classifications
         A = np.genfromtxt(inputdir+'classifications/3Component_AllFeHCutMembership_Percentiles_reduceSNR_r{}R{}_cyl.csv'.format(minrad,maxrad),skip_header=1,delimiter=',')
@@ -191,7 +210,7 @@ for component in ['bar','disc','knot']:
         # this tracks how many stars had failed classifications
         # failed classifications means they were assigned to nonsense components that were not tracked
         #print('classification size',A[:,0].size)
-        #print('criteria size',AllDiscSNR['l'][criteria].size)
+        #print('criteria size',Stars['l'][criteria].size)
 
         # plot all data as background
         ax1.scatter(A[:,10],A[:,11],color='grey',s=0.5,zorder=-99) # Lx-Ly

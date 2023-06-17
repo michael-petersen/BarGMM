@@ -7,6 +7,12 @@ modeltag  = "ModelBarYoungMock10000"
 modelname = 'BarMock'
 mockanalysis = True
 
+# what are the bins available to classify?
+radii = [[0,1],[1,2],[2,3],[3,4],[4,5]]
+binprefacs = [1.,1.,1.,1.,1.]
+
+
+
 # what are the (hand-defined) components?
 comptag = dict()
 comptag[0] = ['disc','bar','bar']

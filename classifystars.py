@@ -13,36 +13,17 @@ import matplotlib as mpl
 mpl.rcParams['font.weight'] = 'medium';mpl.rcParams['xtick.labelsize'] = 10;mpl.rcParams['ytick.labelsize'] = 10
 plt.ion()
 
-
-# exptool imports: only for mock-making
-#from exptool.utils import kde_3d
-#from exptool.analysis import pattern
-#from exptool.observables import transform
-#from exptool.io import particle
-
-#import scipy.interpolate as interpolate
-#from scipy.interpolate import interp1d
-#from scipy.interpolate import UnivariateSpline
-#import scipy
-
-
 from src.localtools import *
 from src.fitmanagement import *
 
-from models.apogee import *
+#from models.apogee import *
 #from models.bulgemock import *
-#from models.barmock import *
+from models.barmock import *
 
 Stars = read_mock_file(datafile)
 
-# classifications should be converted into hdf5 objects
 
 classify = True
-
-radii = [[0,1],[1,2],[2,3],[3,4]]#,[4,5]] # the main bins
-radii = [[0,1],[5,15],[1,2],[15,25],[2,3],[25,35],[3,4],[35,45],[4,5]]#,[4,5]] # the main bins
-binprefac = 1.0
-binprefacs = [1.,0.1,1.,0.1,1.,0.1,1.,0.1,1.0]
 
 
 # print a table of the data
@@ -229,7 +210,10 @@ if classify:
             if knotcomp>=0: probabilities[:,2] = allprobs[:,indx,knotcomp]
             probabilities[0:7,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum]]
             if binprefacs[irad] > 0.5:
-                dset = f.create_dataset(Stars['apogee_id'][starnum], data=probabilities)
+                try:
+                    dset = f.create_dataset(Stars['apogee_id'][starnum], data=probabilities)
+                except:
+                    print(Stars['apogee_id'][starnum])
             else:
                 dset = f.create_dataset(Stars['apogee_id'][starnum]+b'*', data=probabilities)
 

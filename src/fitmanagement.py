@@ -33,7 +33,7 @@ def read_mock_file(infile,nsamples = 1000,distance_uncertainty_factor = 1.,xsun=
         Mock['apogee_id'] = A[:,17]
 
     except:
-        Mock['apogee_id'] = np.nan*Mock['l']
+        Mock['apogee_id'] = Mock['index'].astype('S20')
 
     # make velocities
     theta  = (np.pi/2.)-Mock['b']*np.pi/180.

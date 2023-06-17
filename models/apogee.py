@@ -13,6 +13,11 @@ datafile = inputdir+modeltag+"_tagged.txt"
 modelname = "APOGEE"
 mockanalysis = False
 
+# what are the bins available to classify?
+radii = [[0,1],[5,15],[1,2],[15,25],[2,3],[25,35],[3,4],[35,45],[4,5]]
+binprefacs = [1.,0.1,1.,0.1,1.,0.1,1.,0.1,1.0]
+
+
 """
 # classifications for astroNN distances
 # what are the (hand-defined) components?
