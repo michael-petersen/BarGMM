@@ -106,7 +106,7 @@ for component in ['bar','disc','knot']:
     #
 
     # loop through all radii
-    for irad,rads in enumerate([[0,1],[1,2],[2,3],[3,4],[4,5]]):
+    for irad,rads in enumerate([[0,1],[1,2],[2,3],[3,4]]):
 
         # get the min/max cylindrical radii in kpc
         minrad,maxrad = rads[0],rads[1]
@@ -177,7 +177,7 @@ for component in ['bar','disc','knot']:
 
 
     # loop through all radii
-    for irad,rads in enumerate([[0,1],[1,2],[2,3],[3,4],[4,5]]):
+    for irad,rads in enumerate([[0,1],[1,2],[2,3],[3,4]]):
 
         # get the min/max cylindrical radii in kpc
         minrad,maxrad = rads[0],rads[1]

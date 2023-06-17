@@ -39,23 +39,14 @@ Stars = read_mock_file(datafile)
 
 classify = True
 
-offset = False
-
-if offset:
-    radii = [[5,15],[15,25],[25,35],[35,45]] # the offset bins
-    binprefac = 0.1
-else:
-    radii = [[0,1],[1,2],[2,3],[3,4]]#,[4,5]] # the main bins
-    radii = [[0,1],[5,15],[1,2],[15,25],[2,3],[25,35],[3,4],[35,45]]#,[4,5]] # the main bins
-    binprefac = 1.0
-    binprefacs = [1.,0.1,1.,0.1,1.,0.1,1.,0.1]
-
+radii = [[0,1],[1,2],[2,3],[3,4]]#,[4,5]] # the main bins
+radii = [[0,1],[5,15],[1,2],[15,25],[2,3],[25,35],[3,4],[35,45],[4,5]]#,[4,5]] # the main bins
+binprefac = 1.0
+binprefacs = [1.,0.1,1.,0.1,1.,0.1,1.,0.1,1.0]
 
 
 # print a table of the data
 pltkeys = ['f','Lx', 'Ly','Lz','alpha','sxinv', 'syinv', 'szinv']
-
-
 
 
 fig = plt.figure(figsize=(12.5,3.5),facecolor='white')
@@ -88,24 +79,18 @@ cwheel = ['blue','black','red']
 print('{0:4s}{1:3s}{2:9s}{3:9s} {4:9s} {5:9s} {6:9s} {7:9s} {8:9s} {9:9s}'.format(' ',' ','f','Lx','Ly','Lz','alpha','sx','sy','sz'))
 
 # markdown version for GitHub viewing
-if offset:
-    f = open(inputdir+'fits/README.md','a')
-else:
-    f = open(inputdir+'fits/README.md','w')
-    print('|comp|radii| f | L<sub>x</sub> | L<sub>y</sub> | L<sub>z</sub> | angle | w<sub>x</sub> | w<sub>y</sub> | w<sub>z</sub> |',file=f)
-    print('|---|---|---| ---| --- | ---| --- | --- | --- | --- |',file=f)
 
-if offset:
-    g = open(inputdir+'fits/table.tex','a')
-else:
-    g = open(inputdir+'fits/table.tex','w')
-    print('comp &radii & f & $L_x$& $L_y$ & $L_z$ & $\alpha$ & $\sigma_x$ & $\sigma_y$ & $\sigma_z$ \\\\',file=g)
+f = open(inputdir+'fits/README.md','w')
+print('|comp|radii| f | L<sub>x</sub> | L<sub>y</sub> | L<sub>z</sub> | angle | w<sub>x</sub> | w<sub>y</sub> | w<sub>z</sub> |',file=f)
+print('|---|---|---| ---| --- | ---| --- | --- | --- | --- |',file=f)
 
-if offset:
-    h = open(inputdir+'fits/table.csv','a')
-else:
-    h = open(inputdir+'fits/table.csv','w')
-    print('comp,binmin,binmax,starmed,starmed-,starmed+,f,f-,f+,Lx,Lx-,Lx+,Ly,Ly-,Ly+,Lz,Lz-,Lz+,alpha,alpha-,alpha+,sigmax,sigmax-,sigmax+,sigmay,sigmay-,sigmay+,sigmaz,sigmaz-,sigmaz+,',file=h)
+
+g = open(inputdir+'fits/table.tex','w')
+print('comp &radii & f & $L_x$& $L_y$ & $L_z$ & $\alpha$ & $\sigma_x$ & $\sigma_y$ & $\sigma_z$ \\\\',file=g)
+
+
+h = open(inputdir+'fits/table.csv','w')
+print('comp,binmin,binmax,starmed,starmed-,starmed+,f,f-,f+,Lx,Lx-,Lx+,Ly,Ly-,Ly+,Lz,Lz-,Lz+,alpha,alpha-,alpha+,sigmax,sigmax-,sigmax+,sigmay,sigmay-,sigmay+,sigmaz,sigmaz-,sigmaz+,',file=h)
 
 #for irad,rads in enumerate():
 for irad,rads in enumerate(radii):
@@ -169,13 +154,13 @@ for irad,rads in enumerate(radii):
             radval = np.nanmedian(Stars['R'][criteria])
             if comptag[minrad][cnum]=='bar':
                 axlist[ikey].plot([radval,radval],[median+lo,median+hi],color='black')
-                axlist[ikey].scatter(radval,median,marker='x',edgecolor='none',facecolor='black')
+                axlist[ikey].scatter(radval,median,marker='X',edgecolor='none',facecolor='black')
             elif comptag[minrad][cnum]=='disc':
                 axlist[ikey].plot([radval,radval],[median+lo,median+hi],color='blue')
-                axlist[ikey].scatter(radval,median,marker='x',edgecolor='none',facecolor='blue')
+                axlist[ikey].scatter(radval,median,marker='X',edgecolor='none',facecolor='blue')
             elif comptag[minrad][cnum]=='knot':
                 axlist[ikey].plot([radval,radval],[median+lo,median+hi],color='red')
-                axlist[ikey].scatter(radval,median,marker='x',edgecolor='none',facecolor='red')
+                axlist[ikey].scatter(radval,median,marker='X',edgecolor='none',facecolor='red')
         print(' '+comptag[minrad][cnum])
         print('',file=f)
         print('\\\\',file=g)
@@ -186,10 +171,10 @@ f.close()
 for ax in axlist:
     ax.tick_params(axis="both",direction="in",which="both")
 
-ax1.axis([0.,5.,0.,1.])
+ax1.axis([0.,5.,0.,1.1])
 ax2.axis([0.,5.,-50,50.])
 ax3.axis([0.,5.,-50,50.])
-ax4.axis([0.,5.,-700,100.])
+ax4.axis([0.,5.,-800,100.])
 ax5.axis([0.,5.,0.,90.])
 ax6.axis([0.,5.,0.,220.])
 ax7.axis([0.,5.,0.,220.])
@@ -203,7 +188,7 @@ ax6.set_xlabel('radius (kpc)',x=1.3)
 for ikey,key in enumerate(pltkeys):
     axlist[ikey].set_ylabel(key)
 
-plt.savefig('/Users/mpetersen/Downloads/tstimg.png',dpi=300)
+plt.savefig('figures/fitvalues_{}.png'.format(modeltag),dpi=300)
 
 # generate classifications
 if classify:
@@ -233,8 +218,8 @@ if classify:
         # which component is which?
         disccomp,barcomp,knotcomp = compnum[minrad]
 
-        if minrad==0:
-            f = h5py.File(inputdir+"classifications/AllClassifications.h5","w")
+        if minrad==radii[0][0]:
+            f = h5py.File(inputdir+"classifications/AllClassifications_{}.h5".format(modeltag),"w")
 
         nsamples = 20
         for indx,starnum in enumerate(criteria):
@@ -248,8 +233,7 @@ if classify:
             else:
                 dset = f.create_dataset(Stars['apogee_id'][starnum]+b'*', data=probabilities)
 
-
-        if minrad==35: f.close()
+        if minrad==radii[-1][0]: f.close()
 
 
 

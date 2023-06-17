@@ -98,65 +98,6 @@ def read_mock_file(infile,nsamples = 1000,distance_uncertainty_factor = 1.,xsun=
 
 
 
-
-def make_posterior_list_two(inputfile):
-    """
-    read the three component posterior
-
-    """
-    A = np.genfromtxt(inputfile)
-
-
-    CStats = dict()
-    CStats['Likelihood'] = A[:,13]
-    cats = ['logL','phi','theta','sxinv','syinv','szinv']
-
-    nchains = len(A[:,0])
-
-    for i in range(0,2):
-        CStats[i] = dict()
-        CStats[i]['f'] = np.zeros(nchains)
-        for icat,cat in enumerate(cats):
-            CStats[i][cat] = np.zeros(nchains)
-
-
-    # sort each line by angular momentum value
-    for l in range(0,nchains):
-        Lord = np.argsort([A[l,0],A[l,7]])
-        for cnum,cval in enumerate(Lord):
-            if cval==0:
-                CStats[cnum]['f'][l] = A[l,6]
-                offset = 0
-            else:
-                CStats[cnum]['f'][l] = 1.-A[l,6]
-                offset = 1
-
-            for icat,cat in enumerate(cats):
-                CStats[cnum][cat][l] = A[l,cval*len(cats)+icat+offset]
-
-
-    # make component products
-    COMPS = dict()
-
-    for cnum in range(0,2):
-
-        r   = 10.**CStats[cnum]['logL']
-        th  = np.arccos(CStats[cnum]['theta'])
-        phi = CStats[cnum]['phi']
-        x   = r*np.sin(th)*np.cos(phi)
-        y   = r*np.sin(th)*np.sin(phi)
-        z   = r*np.cos(th)
-
-        COMPS[cnum] = [np.nanmedian(CStats[cnum]['f']),np.nanmedian(x),np.nanmedian(y),np.nanmedian(z),np.nanmedian(1./CStats[cnum]['sxinv']),np.nanmedian(1./CStats[cnum]['syinv']),np.nanmedian(1./CStats[cnum]['szinv'])]
-
-    #plt.scatter(CStats[0]['f'],CStats[0]['logL'],color='black',s=1.)
-    #plt.scatter(CStats[1]['f'],CStats[1]['logL'],color='red',s=1.)
-    #plt.scatter(CStats[2]['f'],CStats[2]['logL'],color='blue',s=1.)
-
-
-    return COMPS,CStats
-
-
 def make_posterior_list_three_rotation(inputfile):
     """
     read the three component posterior
@@ -203,182 +144,8 @@ def make_posterior_list_three_rotation(inputfile):
 
         COMPS[cnum] = [np.nanmedian(CStats[cnum]['f']),np.nanmedian(x),np.nanmedian(y),np.nanmedian(z),np.nanmedian(1./CStats[cnum]['sxinv']),np.nanmedian(1./CStats[cnum]['syinv']),np.nanmedian(1./CStats[cnum]['szinv']),np.nanmedian(CStats[cnum]['alpha'])]
 
-    #plt.scatter(CStats[0]['f'],CStats[0]['logL'],color='black',s=1.)
-    #plt.scatter(CStats[1]['f'],CStats[1]['logL'],color='red',s=1.)
-    #plt.scatter(CStats[2]['f'],CStats[2]['logL'],color='blue',s=1.)
-
-
     return COMPS,CStats
 
-
-def make_posterior_list_three(inputfile):
-    """
-    read the three component posterior
-
-    """
-    A = np.genfromtxt(inputfile)
-
-
-    CStats = dict()
-    CStats['Likelihood'] = A[:,21]
-    cats = ['logL','phi','theta','sxinv','syinv','szinv','f']
-
-    nchains = len(A[:,0])
-
-    for i in range(0,3):
-        CStats[i] = dict()
-        for icat,cat in enumerate(cats):
-            CStats[i][cat] = np.zeros(nchains)
-
-
-    # sort each line by angular momentum value
-    for l in range(0,nchains):
-        Lord = np.argsort([A[l,0],A[l,7],A[l,14]])
-        for cnum,cval in enumerate(Lord):
-            for icat,cat in enumerate(cats):
-                if cat =='f':
-                    CStats[cnum][cat][l] = A[l,cval*len(cats)+icat]/(A[l,6]+A[l,13]+A[l,20])
-                else:
-                    CStats[cnum][cat][l] = A[l,cval*len(cats)+icat]
-
-
-    # make component products
-    COMPS = dict()
-
-    for cnum in range(0,3):
-
-        r   = 10.**CStats[cnum]['logL']
-        th  = np.arccos(CStats[cnum]['theta'])
-        phi = CStats[cnum]['phi']
-        x   = r*np.sin(th)*np.cos(phi)
-        y   = r*np.sin(th)*np.sin(phi)
-        z   = r*np.cos(th)
-
-        COMPS[cnum] = [np.nanmedian(CStats[cnum]['f']),np.nanmedian(x),np.nanmedian(y),np.nanmedian(z),np.nanmedian(1./CStats[cnum]['sxinv']),np.nanmedian(1./CStats[cnum]['syinv']),np.nanmedian(1./CStats[cnum]['szinv'])]
-
-    #plt.scatter(CStats[0]['f'],CStats[0]['logL'],color='black',s=1.)
-    #plt.scatter(CStats[1]['f'],CStats[1]['logL'],color='red',s=1.)
-    #plt.scatter(CStats[2]['f'],CStats[2]['logL'],color='blue',s=1.)
-
-
-    return COMPS,CStats
-
-
-
-
-def cstats_to_comps(CStats,indx):
-
-
-    COMPS = dict()
-
-    for cnum in range(0,3):
-
-        r   = 10.**CStats[cnum]['logL']
-        th  = np.arccos(CStats[cnum]['theta'])
-        phi = CStats[cnum]['phi']
-        x   = r*np.sin(th)*np.cos(phi)
-        y   = r*np.sin(th)*np.sin(phi)
-        z   = r*np.cos(th)
-
-        if 'alpha' in CStats[cnum].keys():
-            COMPS[cnum] = [CStats[cnum]['f'][indx],x[indx],y[indx],z[indx],1./CStats[cnum]['sxinv'][indx],1./CStats[cnum]['syinv'][indx],1./CStats[cnum]['szinv'][indx],CStats[cnum]['alpha'][indx]]
-        else:
-            COMPS[cnum] = [CStats[cnum]['f'][indx],x[indx],y[indx],z[indx],1./CStats[cnum]['sxinv'][indx],1./CStats[cnum]['syinv'][indx],1./CStats[cnum]['szinv'][indx]]
-
-    return COMPS
-
-
-
-
-def make_probabilities(Mock,good,COMPS,nanprint=False):
-    """
-    Mock
-    good
-    COMPS: dictionary of component centroids
-
-    """
-    nparams = len(COMPS[0])
-
-    probcomp = np.zeros([len(good),len(COMPS.keys())])
-
-    for compnum,comp in enumerate(COMPS.keys()):
-        #for indx in range(0,Mock['Lz'].size):
-        for inum,indx in enumerate(good):
-
-            # first step: de-rotate Lx and Ly from each other, if alpha is specified
-            if nparams == 8:
-                # the rotation is defined from the
-                inputx = Mock['eLx'][indx]*np.cos(COMPS[comp][7])+Mock['eLy'][indx]*np.sin(COMPS[comp][7])
-                inputy =-Mock['eLx'][indx]*np.sin(COMPS[comp][7])+Mock['eLy'][indx]*np.cos(COMPS[comp][7])
-            else:
-                inputx = Mock['eLx'][indx]
-                inputy = Mock['eLy'][indx]
-
-
-            Cn = np.corrcoef(np.array([inputx,inputy,Mock['eLz'][indx]])) # this will give the corrcoefs
-            C = np.cov(np.array([inputx,inputy,Mock['eLz'][indx]]))
-            ex,ey,ez = np.diag(C) # get the individual data values
-
-            # add the hyperparameters: eq 4
-            exd = ex + COMPS[comp][4] # components are already squared
-            eyd = ey + COMPS[comp][5]
-            ezd = ez + COMPS[comp][6]
-            ex,ey,ez = np.sqrt(ex),np.sqrt(ey),np.sqrt(ez)
-
-            Cf = np.zeros_like(Cn)
-            Cf[0][0],Cf[0][1],Cf[0][2] = exd           ,ex*ey*Cn[0][1],ex*ez*Cn[0][2]
-            Cf[1][0],Cf[1][1],Cf[1][2] = ey*ex*Cn[1][0],eyd           ,ey*ez*Cn[1][2]
-            Cf[2][0],Cf[2][1],Cf[2][2] = ez*ex*Cn[2][0],ez*ey*Cn[2][1],ezd
-
-            #Cf *= 10.
-            #ldiff = np.array([Lx0,Ly0,Lz0])-np.array([COMPS[comp][1],COMPS[comp][2],COMPS[comp][3]])
-            ldiff = np.array([Mock['Lx'][indx] - COMPS[comp][1],
-                              Mock['Ly'][indx] - COMPS[comp][2],
-                              Mock['Lz'][indx] - COMPS[comp][3]])
-
-
-            #print('lz:',ldiff,compnum)
-            prefac = 1.
-            # compute the un-normalised probability (eq 2)
-            N1 = (1./np.sqrt(np.power(2.*np.pi,3.)*np.abs(np.linalg.det(Cf))))
-
-            # put in a hard block check for very small values
-            N2b = np.dot(ldiff.T,np.dot(np.linalg.inv(Cf),ldiff))
-            if N2b < 0:
-                N2b = 20.
-            N2 = np.exp(-prefac*N2b)
-
-            # is this the minimum floor we should apply?
-            if N1<1.e-12: N1 = 1.e-12
-            if N2<1.e-12: N2 = 1.e-12
-
-            N = N1*N2
-
-            #if compnum==3:
-            #    print(compnum,N1,N2,N,np.dot(ldiff.T,np.dot(np.linalg.inv(Cf),ldiff)))
-
-            # check for bad component fits
-            if (np.isnan(N)) & (nanprint==True):
-                print("Compnum=",compnum,N,np.linalg.det(Cf),ldiff,np.exp(-np.dot(ldiff.T,np.dot(np.linalg.inv(Cf),ldiff))))
-                print("Cf=",Cf)
-                print("C=",C)
-
-            probcomp[inum,compnum] = N
-
-
-
-    # normalise for fitted probabilities:
-    for compnum,comp in enumerate(COMPS.keys()):
-        probcomp[:,compnum] *= COMPS[comp][0]
-
-    # complete the normalisation on a per-star basis
-    compsums = np.nansum(probcomp,axis=1)
-
-    for compnum,comp in enumerate(COMPS.keys()):
-        probcomp[:,compnum] /= compsums
-
-    # return array of probabilities
-    return probcomp
 
 
 
@@ -424,22 +191,6 @@ def make_rotated_probabilities(Mock,good,COMPS,nanprint=False,nonorm=False):
 
             Cf = np.cov(np.array([inputx,inputy,Mock['eLz'][indx]])) # is this all I need?
 
-            #Cn = np.corrcoef(np.array([inputx,inputy,Mock['eLz'][indx]])) # this will give the corrcoefs
-            #C = np.cov(np.array([inputx,inputy,Mock['eLz'][indx]])) # is this all I need?
-            #ex,ey,ez = np.diag(C) # get the individual data values
-
-            #exd = ex# + COMPS[comp][4] # components are already squared
-            #eyd = ey# + COMPS[comp][5]
-            #ezd = ez# + COMPS[comp][6]
-            #ex,ey,ez = np.sqrt(ex),np.sqrt(ey),np.sqrt(ez)
-
-            #Cf = np.zeros_like(Cn)
-            #Cf[0][0],Cf[0][1],Cf[0][2] = exd   ,ex*ey*Cn[0][1],ex*ez*Cn[0][2]
-            #Cf[1][0],Cf[1][1],Cf[1][2] = ey*ex*Cn[1][0],eyd   ,ey*ez*Cn[1][2]
-            #Cf[2][0],Cf[2][1],Cf[2][2] = ez*ex*Cn[2][0],ez*ey*Cn[2][1],ezd
-
-            #Cf = (C**2)/Cn
-
             # add the hyperparameters
             Cf[0][0] += c11m
             Cf[0][1] += c12m
@@ -451,7 +202,6 @@ def make_rotated_probabilities(Mock,good,COMPS,nanprint=False,nonorm=False):
             # one option is log determinant, e.g. https://numpy.org/doc/stable/reference/generated/numpy.linalg.slogdet.html#numpy.linalg.slogdet
             (signCf, logdetCf) = np.linalg.slogdet(Cf)
             covdet = np.abs(signCf * np.exp(logdetCf))
-            #covdet = np.abs(np.linalg.det(Cf))
             covinv = np.linalg.inv(Cf)
 
             ldiff = np.array([Mock['Lx'][indx] - dlxm,
@@ -459,7 +209,6 @@ def make_rotated_probabilities(Mock,good,COMPS,nanprint=False,nonorm=False):
                               Mock['Lz'][indx] - dlzm])
 
 
-            #print('lz:',ldiff,compnum)
             prefac = 1.
             # compute the un-normalised probability (eq 2)
             N1 = 1./np.sqrt(np.power(2.*np.pi,3.)*covdet)
@@ -476,9 +225,6 @@ def make_rotated_probabilities(Mock,good,COMPS,nanprint=False,nonorm=False):
 
             N = N1*N2
 
-            #if compnum==3:
-            #    print(compnum,N1,N2,N,np.dot(ldiff.T,np.dot(np.linalg.inv(Cf),ldiff)))
-
             # check for bad component fits
             if (np.isnan(N)) & (nanprint==True):
                 print("Compnum=",compnum,N,np.linalg.det(Cf),ldiff,np.exp(-np.dot(ldiff.T,np.dot(np.linalg.inv(Cf),ldiff))))
@@ -486,8 +232,6 @@ def make_rotated_probabilities(Mock,good,COMPS,nanprint=False,nonorm=False):
                 print("C=",C)
 
             probcomp[inum,compnum] = N
-
-
 
     # normalise for fitted probabilities:
     for compnum,comp in enumerate(COMPS.keys()):
@@ -632,7 +376,7 @@ def make_all_probabilities(data, criteria, CStats, nchains=100, nanprint=False, 
     """
     # nchains = 100#CStats[0]['f'].size
     nstars = criteria.size
-    print("Number of stars: {0}, with median R={1:4.3f}".format(nstars, np.nanmedian(data['R'][criteria])))
+    print("Number of stars: {0}, with median R={1:4.3f} <sigma_Lz>={2:5.1f}".format(nstars, np.nanmedian(data['R'][criteria]),np.nanmedian(np.nanstd(data['eLz'][criteria],axis=1))))
 
     allprobs = np.zeros([nchains, nstars, 3])
 
@@ -652,6 +396,65 @@ def make_all_probabilities(data, criteria, CStats, nchains=100, nanprint=False, 
 
 
 def print_classification(DModel,criteria,radii,percentileprob,errorprob,disccomp,barcomp,knotcomp,printdir,mockanalysis):
+
+    minrad,maxrad = radii[0],radii[1]
+
+    DModel['discprob'] = np.zeros(DModel['x'].size)
+    DModel['ediscprob'] = np.zeros(DModel['x'].size)
+
+    if disccomp>=0:
+        DModel['discprob'][criteria] = percentileprob[:,disccomp]
+        DModel['ediscprob'][criteria] = errorprob[:,disccomp]
+
+
+    DModel['barprob'] = np.zeros(DModel['x'].size)
+    DModel['ebarprob'] = np.zeros(DModel['x'].size)
+
+    if barcomp>=0:
+        DModel['barprob'][criteria] = percentileprob[:,barcomp]
+        DModel['ebarprob'][criteria] = errorprob[:,barcomp]
+
+
+    DModel['knotprob'] = np.zeros(DModel['x'].size)
+    DModel['eknotprob'] = np.zeros(DModel['x'].size)
+
+    if knotcomp>=0:
+        DModel['knotprob'][criteria] = percentileprob[:,knotcomp]
+        DModel['eknotprob'][criteria] = errorprob[:,knotcomp]
+
+
+    # combine knot,bar
+    #DModel['barprob'] = np.zeros(DModel['x'].size)
+    #DModel['barprob'][criteria] = percentileprob[:,1]+percentileprob[:,0]
+
+    #DModel['knotprob'] = np.zeros(DModel['x'].size)
+    #DModel['knotprob'][criteria] = 0.
+
+    f = open(printdir+'/3Component_AllFeHCutMembership_Percentiles_reduceSNR_r{}R{}_cyl.csv'.format(minrad,maxrad),'w')
+
+    print('APOGEE_ID, P_knot, s_knot, P_bar, s_bar, P_disc, s_disc, X, Y, Z, Lx, Ly, Lz',file=f)
+
+    for i in range(0,len(DModel['barprob'])):
+
+        # print all regardless
+        if (DModel['barprob'][i] + DModel['discprob'][i] + DModel['knotprob'][i]) > 0.7:
+            if mockanalysis:
+                if DModel['bulge'][i]==1.0:
+                    pname = -1*DModel['index'][i]
+                else:
+                    pname = DModel['index'][i]
+            else:
+                pname = DModel['apogee_id'][i]
+            print(pname,',',DModel['knotprob'][i],',',DModel['eknotprob'][i],',',DModel['barprob'][i],',',DModel['ebarprob'][i],',',DModel['discprob'][i],',',DModel['ediscprob'][i],',',\
+                  DModel['x'][i],',',DModel['y'][i],',',DModel['z'][i],',',\
+                        DModel['Lx'][i],',',DModel['Ly'][i],',',DModel['Lz'][i],file=f)
+
+    f.close()
+
+
+
+
+def print_h5_classification(DModel,criteria,radii,allprobs,disccomp,barcomp,knotcomp,printdir,mockanalysis):
 
     minrad,maxrad = radii[0],radii[1]
 
