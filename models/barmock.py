@@ -4,6 +4,8 @@ import numpy as np
 inputdir  = 'data/barmock/'
 datafile  = inputdir+"ModelBarYoungMock10000.txt"
 modeltag  = "ModelBarYoungMock10000"
+appendix  = ""
+
 modelname = 'BarMock'
 mockanalysis = True
 

@@ -4,6 +4,9 @@ import numpy as np
 inputdir  = 'data/bulgemock/'
 datafile  = inputdir+"ModelBarYoungBulgeMock10000.txt"
 modeltag  = "ModelBarYoungBulgeMock10000"
+appendix  = "_apog0" # if this is for the all-sky sample
+appendix  = ""
+
 modelname = 'BulgeMock'
 mockanalysis = True
 
@@ -13,31 +16,57 @@ radii = [[0,1],[1,2],[2,3],[3,4],[4,5]]
 binprefacs = [1.,1.,1.,1.,1.]
 
 
+if appendix == "":
+    # what are the (hand-defined) components?
+    comptag = dict()
+    comptag[0] = ['disc','bar','knot']
+    comptag[1] = ['disc','knot','bar']
+    comptag[2] = ['disc','-','bar']
+    comptag[3] = ['-','-','disc']
+    comptag[4] = ['-','disc','-']
 
-# what are the (hand-defined) components?
-comptag = dict()
-comptag[0] = ['disc','bar','knot']
-comptag[1] = ['disc','knot','bar']
-comptag[2] = ['disc','-','bar']
-comptag[3] = ['-','-','disc']
-comptag[4] = ['-','disc','-']
+    # by component number, which component is [disc,bar,knot]?
+    compnum = dict()
+    compnum[0] = [0,1,2]
+    compnum[1] = [0,2,1]
+    compnum[2] = [0,2,-1]
+    compnum[3] = [2,-1,-1]
+    compnum[4] = [1,-1,-1]
 
-# by component number, which component is [disc,bar,knot]?
-compnum = dict()
-compnum[0] = [0,1,2]
-compnum[1] = [0,2,1]
-compnum[2] = [0,2,-1]
-compnum[3] = [2,-1,-1]
-compnum[4] = [1,-1,-1]
+    # for ellipse tracing
+    # by [bar,disc,knot], which component is which?
+    complist = dict()
+    complist[0] = [1,0,2]
+    complist[1] = [1,2,0]
+    complist[2] = [1,-1,0]
+    complist[3] = [-1,-1,1]
+    complist[4] = [-1,1,-1]
+else:
+    # what are the (hand-defined) components?
+    comptag = dict()
+    comptag[0] = ['disc','bar','knot']
+    comptag[1] = ['disc','bar','knot']
+    comptag[2] = ['disc','-','bar']
+    comptag[3] = ['-','disc','bar']
+    comptag[4] = ['-','-','disc']
 
-# for ellipse tracing
-# by [bar,disc,knot], which component is which?
-complist = dict()
-complist[0] = [1,0,2]
-complist[1] = [1,2,0]
-complist[2] = [1,-1,0]
-complist[3] = [-1,-1,1]
-complist[4] = [-1,1,-1]
+    # by component number, which component is [disc,bar,knot]?
+    compnum = dict()
+    compnum[0] = [0,1,2]
+    compnum[1] = [0,1,2]
+    compnum[2] = [0,2,-1]
+    compnum[3] = [1,2,-1]
+    compnum[4] = [2,-1,-1]
+
+    # for ellipse tracing
+    # by [bar,disc,knot], which component is which?
+    complist = dict()
+    complist[0] = [1,0,2]
+    complist[1] = [1,0,2]
+    complist[2] = [1,-1,0]
+    complist[3] = [-1,1,0]
+    complist[4] = [-1,-1,1]
+
 
 
 

@@ -1,5 +1,6 @@
 
 inputdir   = 'data/apogee/'
+appendix   = "" # only needed for model compatibility
 
 # version using astroNN distances
 modeltag = "APOGEE_all_feh6_SNRc"
