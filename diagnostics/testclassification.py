@@ -2,6 +2,7 @@
 # basic imports
 import numpy as np
 from numpy.linalg import eig, inv
+import h5py
 
 # plotting elements
 import matplotlib.pyplot as plt
@@ -20,6 +21,7 @@ from src.localtools import *
 from src.fitmanagement import *
 
 from models.apogee import *
+from models.bulgemock import *
 
 Stars = read_mock_file(datafile)
 
@@ -128,26 +130,26 @@ plt.plot(barr*np.cos(-30*np.pi/180.),barr*np.sin(-30*np.pi/180.),color='black',l
 # need a way to match these against the apogee ids
 
 
-nsamples = 20
-for indx,starnum in enumerate(criteria):
-    probabilities = np.zeros([nsamples,4]) # always disc, bar, knot, [x,y,z,Lx,Ly,Lz]
-    if disccomp>=0: probabilities[:,0] = allprobs[:,indx,disccomp]
-    if barcomp>=0:  probabilities[:,1] = allprobs[:,indx,barcomp]
-    if knotcomp>=0: probabilities[:,2] = allprobs[:,indx,knotcomp]
-    probabilities[0:7,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum]]
-    dset = f.create_dataset(Stars['apogee_id'][starnum], data=probabilities)
+f = h5py.File("data/bulgemock/classifications/AllClassifications_ModelBarYoungBulgeMock10000.h5","r")
+g = h5py.File("data/bulgemock/classifications/AllClassifications_ModelBarYoungBulgeMock10000_apog0.h5","r")
+
+# match up by index
+keyarray = np.array([int(key.split('.')[0]) for key in f.keys()])
+xy,xind,yind = np.intersect1d(keyarray,Stars['index'].astype('int'),return_indices=True)
+
+keymax = 1000
+for ikey,key in enumerate(f.keys()):
+    if ikey<keymax:
+        #if f[key][0,3]<1.0:
+        if Stars['apogee'][yind][ikey]==1:
+            #print(f[key][6,3])
+            _ = plt.scatter(f[key][:,1],g[key][:,1],color='black',s=1.)
 
 
-f.close()
+plt.xlabel('apogee==1')
+plt.ylabel('apogee==0')
 
 
-f = h5py.File("tst.h5","r")
-#f.keys() # these are the APOGEE IDs
-
-for key in f.keys():
-    if f[key][0,1] > 0.9:
-        #print(f[key][6,3])
-        _ = plt.scatter(f[key][1,3],f[key][2,3],color='black',s=1.)
 
 
 

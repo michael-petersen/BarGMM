@@ -15,15 +15,16 @@ plt.ion()
 
 from src.localtools import *
 from src.fitmanagement import *
+from src.tableprint import *
 
-from models.apogee import *
+#from models.apogee import *
 #from models.bulgemock import *
-#from models.barmock import *
+from models.barmock import *
 
 Stars = read_mock_file(datafile)
 
 
-classify = True
+classify = False
 
 
 # print a table of the data
@@ -56,81 +57,53 @@ axlist = [ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8]
 
 cwheel = ['blue','black','red']
 
-
-print('{0:4s}{1:3s}{2:9s}{3:9s} {4:9s} {5:9s} {6:9s} {7:9s} {8:9s} {9:9s}'.format(' ',' ','f','Lx','Ly','Lz','alpha','sx','sy','sz'))
-
-# markdown version for GitHub viewing
-
-f = open(inputdir+'fits/README.md','w')
-print('|comp|radii| f | L<sub>x</sub> | L<sub>y</sub> | L<sub>z</sub> | angle | w<sub>x</sub> | w<sub>y</sub> | w<sub>z</sub> |',file=f)
-print('|---|---|---| ---| --- | ---| --- | --- | --- | --- |',file=f)
-
-
-g = open(inputdir+'fits/table.tex','w')
-print('comp &radii & f & $L_x$& $L_y$ & $L_z$ & $\alpha$ & $\sigma_x$ & $\sigma_y$ & $\sigma_z$ \\\\',file=g)
-
-
-h = open(inputdir+'fits/table.csv','w')
-print('comp,binmin,binmax,starmed,starmed-,starmed+,f,f-,f+,Lx,Lx-,Lx+,Ly,Ly-,Ly+,Lz,Lz-,Lz+,alpha,alpha-,alpha+,sigmax,sigmax-,sigmax+,sigmay,sigmay-,sigmay+,sigmaz,sigmaz-,sigmaz+,',file=h)
+A = table_print(format='terminal')
+B = table_print(format='markdown',outputfile=open(inputdir+'fits/README{0}.md'.format(appendix),'w'))
+C = table_print(format='csv',outputfile=open(inputdir+'fits/table{0}.csv'.format(appendix),'w'))
+D = table_print(format='tex',outputfile=open(inputdir+'fits/table{0}.tex'.format(appendix),'w'))
 
 #for irad,rads in enumerate():
 for irad,rads in enumerate(radii):
     minrad,maxrad = rads[0],rads[1]
-    directory = inputdir+"/fits/{0}_d{1:02d}{2:02d}".format(modeltag,minrad,maxrad)
+    directory = inputdir+"/fits/{0}_d{1:02d}{2:02d}{3}".format(modeltag,minrad,maxrad,appendix)
     inputfile = directory+'/chains/gaussian-post_equal_weights.dat'
     COMPS,CStats = make_posterior_list_three_rotation_sorted(inputfile)
-    print('{0:2.1f}-{1:2.1f}'.format(np.round(binprefacs[irad]*minrad,1),np.round(binprefacs[irad]*maxrad,1)))
 
     criteria = np.where((Stars['R']>(binprefacs[irad]*minrad)) & (Stars['R']<(binprefacs[irad]*maxrad)))[0]
 
+    A.print_column1(comptag,binprefacs,minrad,maxrad,irad,0,Stars,criteria)
+
     for cnum in [0,1,2]:
 
-        # print to markdown
-        print('|'+comptag[minrad][cnum],end='|',file=f)
-        print('{0:2.1f}-{1:2.1f}'.format(np.round(binprefacs[irad]*minrad,1),np.round(binprefacs[irad]*maxrad,1)),end='|',file=f)
-
-        # print to latex
-        print(comptag[minrad][cnum],end='&',file=g)
-        print('{0:2.1f}-{1:2.1f}'.format(np.round(binprefacs[irad]*minrad,1),np.round(binprefacs[irad]*maxrad,1)),end='&',file=g)
-
-        # print to csv
-        print(comptag[minrad][cnum],end=',',file=h)
-        print('{0:2.1f},{1:2.1f}'.format(np.round(binprefacs[irad]*minrad,1),np.round(binprefacs[irad]*maxrad,1)),end=',',file=h)
-        print('{0:3.2f},{1:3.2f},{2:3.2f}'.format(np.nanmedian(Stars['R'][criteria]),np.nanpercentile(Stars['R'][criteria],14.),np.nanpercentile(Stars['R'][criteria],86.)),end=',',file=h)
+        for p in [B,C,D]:
+            p.print_column1(comptag,binprefacs,minrad,maxrad,irad,cnum,Stars,criteria)
 
         for ikey,key in enumerate(pltkeys):
             if 'inv' in key:
                 median = np.sqrt(1./np.nanmedian(CStats[cnum][key]))
                 lo = np.sqrt(1./np.nanpercentile(CStats[cnum][key],14.)) - median
                 hi = np.sqrt(1./np.nanpercentile(CStats[cnum][key],86.)) - median
-                print(' {0:9.4f}'.format(median),end='')
-                print('{0}<sup>+{1}</sup><sub>-{2}</sub>'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='|',file=f)
-                print('{0}^{{+{1}}}_{{-{2}}}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='&',file=g)
-                print('{0},-{2},+{1}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end=',',file=h)
+                for p in [A,B,C,D]:
+                    p.print_key_column(median,lo,hi,rounding=1)
+
             elif key=='alpha':
                 median = (180./np.pi)*np.nanmedian(CStats[cnum][key])
                 lo = (180./np.pi)*np.nanpercentile(CStats[cnum][key],14.) - median
                 hi = (180./np.pi)*np.nanpercentile(CStats[cnum][key],86.) - median
-                print(' {0:9.4f}'.format(median),end='')
-                print('{0}<sup>+{1}</sup><sub>-{2}</sub>'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='|',file=f)
-                print('{0}^{{+{1}}}_{{-{2}}}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='&',file=g)
-                print('{0},-{2},+{1}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end=',',file=h)
+                for p in [A,B,C,D]:
+                    p.print_key_column(median,lo,hi,rounding=1)
             elif key=='f':
                 median = np.nanmedian(CStats[cnum][key])
                 lo = np.nanpercentile(CStats[cnum][key],14.) - median
                 hi = np.nanpercentile(CStats[cnum][key],86.) - median
-                print(' {0:9.4f}'.format(median),end='')
-                print('{0}<sup>+{1}</sup><sub>-{2}</sub>'.format(np.round(median,4),np.round(np.abs(lo),4),np.round(np.abs(hi),4)),end='|',file=f)
-                print('{0}^{{+{1}}}_{{-{2}}}'.format(np.round(median,4),np.round(np.abs(lo),4),np.round(np.abs(hi),4)),end='&',file=g)
-                print('{0},-{2},+{1}'.format(np.round(median,4),np.round(np.abs(lo),4),np.round(np.abs(hi),4)),end=',',file=h)
+                for p in [A,B,C,D]:
+                    p.print_key_column(median,lo,hi,rounding=4)
             else: # Lx, Ly, Lz
                 median = np.nanmedian(CStats[cnum][key])
                 lo = np.nanpercentile(CStats[cnum][key],14.) - median
                 hi = np.nanpercentile(CStats[cnum][key],86.) - median
-                print(' {0:9.4f}'.format(median),end='')
-                print('{0}<sup>+{1}</sup><sub>-{2}</sub>'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='|',file=f)
-                print('{0}^{{+{1}}}_{{-{2}}}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end='&',file=g)
-                print('{0},-{2},+{1}'.format(np.round(median,1),np.round(np.abs(lo),1),np.round(np.abs(hi),1)),end=',',file=h)
+                for p in [A,B,C,D]:
+                    p.print_key_column(median,lo,hi,rounding=1)
 
             radval = np.nanmedian(Stars['R'][criteria])
             if comptag[minrad][cnum]=='bar':
@@ -142,12 +115,12 @@ for irad,rads in enumerate(radii):
             elif comptag[minrad][cnum]=='knot':
                 axlist[ikey].plot([radval,radval],[median+lo,median+hi],color='red')
                 axlist[ikey].scatter(radval,median,marker='X',edgecolor='none',facecolor='red')
-        print(' '+comptag[minrad][cnum])
-        print('',file=f)
-        print('\\\\',file=g)
-        print('',file=h)
 
-f.close()
+        for p in [A,B,C,D]:
+            p.print_columnX(comptag,minrad,cnum)
+
+for p in [B,C,D]:
+    p.f.close()
 
 for ax in axlist:
     ax.tick_params(axis="both",direction="in",which="both")
@@ -169,7 +142,7 @@ ax6.set_xlabel('radius (kpc)',x=1.3)
 for ikey,key in enumerate(pltkeys):
     axlist[ikey].set_ylabel(key)
 
-plt.savefig('figures/fitvalues_{}.png'.format(modeltag),dpi=300)
+plt.savefig('figures/fitvalues_{0}{1}.png'.format(modeltag,appendix),dpi=300)
 
 # generate classifications
 if classify:
@@ -200,7 +173,7 @@ if classify:
         disccomp,barcomp,knotcomp = compnum[minrad]
 
         if minrad==radii[0][0]:
-            f = h5py.File(inputdir+"classifications/AllClassifications_{}.h5".format(modeltag),"w")
+            f = h5py.File(inputdir+"classifications/AllClassifications_{0}{1}.h5".format(modeltag,appendix),"w")
 
         nsamples = 20
         for indx,starnum in enumerate(criteria):

@@ -1,46 +1,69 @@
 
 import numpy as np
 
-inputdir  = 'data/barmock/'
-datafile  = inputdir+"ModelBarYoungMock10000.txt"
-modeltag  = "ModelBarYoungMock10000"
-appendix  = ""
+inputdir     = 'data/barmock/'
+datafile     = inputdir+"ModelBarYoungMock10000b.txt"
+modeltag     = "ModelBarYoungMock10000b"
+appendix     = "_apog1"
+#appendix     = "_apog1"
 
-modelname = 'BarMock'
+modelname    = 'BarMock'
 mockanalysis = True
 
 # what are the bins available to classify?
-radii = [[0,1],[1,2],[2,3],[3,4],[4,5]]
-binprefacs = [1.,1.,1.,1.,1.]
+radii      = [[0,1],[1,2],[2,3],[3,4]]
+binprefacs = [ 1.,   1.,   1.,   1.]
 
 
+if appendix=="_apog0":
+    # what are the (hand-defined) components?
+    comptag = dict()
+    comptag[0] = ['disc','bar','knot']
+    comptag[1] = ['disc','bar','knot']
+    comptag[2] = ['disc','bar','knot']
+    comptag[3] = ['disc','-','bar']
 
-# what are the (hand-defined) components?
-comptag = dict()
-comptag[0] = ['disc','disc','bar']
-comptag[1] = ['disc','disc','bar']
-comptag[2] = ['disc','-','bar']
-comptag[3] = ['-','-','disc']
-comptag[4] = ['-','-','disc']
+    # by component number, which component is [disc,bar,knot]?
+    # assign the number of the cluster
+    compnum = dict()
+    compnum[0] = [0,1,2]
+    compnum[1] = [0,1,2]
+    compnum[2] = [0,1,2]
+    compnum[3] = [0,2,-1]
 
-# by component number, which component is [disc,bar,knot]?
-# assign the number of the cluster
-compnum = dict()
-compnum[0] = [1,2,-1]
-compnum[1] = [1,2,-1]
-compnum[2] = [0,2,-1]
-compnum[3] = [2,-1,-1]
-compnum[4] = [2,-1,-1]
+    # for ellipse tracing
+    # by [bar,disc,knot]=[0,1,2], which component is which?
+    # assign the number of the component
+    complist = dict()
+    complist[0] = [1,0,2]
+    complist[1] = [1,0,2]
+    complist[2] = [1,0,2]
+    complist[3] = [1,-1,0]
 
-# for ellipse tracing
-# by [bar,disc,knot]=[0,1,2], which component is which?
-# assign the number of the component
-complist = dict()
-complist[0] = [1,1,0]
-complist[1] = [1,1,0]
-complist[2] = [1,-1,0]
-complist[3] = [-1,-1,1]
-complist[4] = [-1,-1,1]
+if appendix=="_apog1":
+    # what are the (hand-defined) components?
+    comptag = dict()
+    comptag[0] = ['disc','bar','knot']
+    comptag[1] = ['disc','bar','knot']
+    comptag[2] = ['disc','disc','bar']
+    comptag[3] = ['-','disc','bar']
+
+    # by component number, which component is [disc,bar,knot]?
+    # assign the number of the cluster
+    compnum = dict()
+    compnum[0] = [0,1,2]
+    compnum[1] = [0,1,2]
+    compnum[2] = [0,1,-1]
+    compnum[3] = [1,2,-1]
+
+    # for ellipse tracing
+    # by [bar,disc,knot]=[0,1,2], which component is which?
+    # assign the number of the component
+    complist = dict()
+    complist[0] = [1,0,2]
+    complist[1] = [1,0,2]
+    complist[2] = [1,1,0]
+    complist[3] = [-1,1,0]
 
 
 
