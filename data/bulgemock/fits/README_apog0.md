@@ -1,3 +1,5 @@
+|comp|radii| f | L<sub>x</sub> | L<sub>y</sub> | L<sub>z</sub> | angle | w<sub>x</sub> | w<sub>y</sub> | w<sub>z</sub> |
+|---|---|---| ---| --- | ---| --- | --- | --- | --- |
 |disc|0.0-1.0|0.108<sup>+0.0186</sup><sub>-0.0202</sub>|-32.5<sup>+15.5</sup><sub>-13.4</sub>|-6.6<sup>+20.3</sup><sub>-21.8</sub>|-62.5<sup>+14.5</sup><sub>-12.9</sub>|38.3<sup>+24.6</sup><sub>-34.6</sub>|104.4<sup>+12.3</sup><sub>-11.5</sub>|96.8<sup>+13.0</sup><sub>-13.7</sub>|68.7<sup>+8.5</sup><sub>-8.0</sub>|
 |bar|0.0-1.0|0.3661<sup>+0.0234</sup><sub>-0.0223</sub>|-0.2<sup>+2.7</sup><sub>-2.4</sub>|-2.2<sup>+3.0</sup><sub>-2.4</sub>|-5.8<sup>+3.1</sup><sub>-3.3</sub>|23.1<sup>+10.9</sup><sub>-10.6</sub>|50.5<sup>+3.0</sup><sub>-2.9</sub>|38.8<sup>+4.0</sup><sub>-3.8</sub>|32.8<sup>+2.9</sup><sub>-2.7</sub>|
 |knot|0.0-1.0|0.5256<sup>+0.0181</sup><sub>-0.0179</sub>|-0.0<sup>+0.4</sup><sub>-0.3</sub>|0.1<sup>+0.2</sup><sub>-0.4</sub>|-0.1<sup>+0.4</sup><sub>-0.2</sub>|43.8<sup>+31.1</sup><sub>-33.2</sub>|10.1<sup>+0.1</sup><sub>-0.1</sub>|10.1<sup>+0.1</sup><sub>-0.1</sub>|10.0<sup>+0.1</sup><sub>-0.0</sub>|

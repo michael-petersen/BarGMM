@@ -5,6 +5,7 @@ inputdir  = 'data/bulgemock/'
 datafile  = inputdir+"ModelBarYoungBulgeMock10000b.txt"
 modeltag  = "ModelBarYoungBulgeMock10000b"
 appendix  = "_apog0" # if this is for the all-sky sample
+#appendix  = "_apog1" # if this is for the SDSS-coverage sample
 
 modelname = 'BulgeMock'
 mockanalysis = True

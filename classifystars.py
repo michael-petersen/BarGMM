@@ -17,9 +17,9 @@ from src.localtools import *
 from src.fitmanagement import *
 from src.tableprint import *
 
-#from models.apogee import *
+from models.apogee import *
 #from models.bulgemock import *
-from models.barmock import *
+#from models.barmock import *
 
 Stars = read_mock_file(datafile)
 
@@ -52,6 +52,7 @@ ax7 = fig.add_axes([xmin+2*(dx+xbuf),ymin+0*dy,dx,dy]) # sigmay
 ax8 = fig.add_axes([xmin+3*(dx+xbuf),ymin+0*dy,dx,dy]) # sigmaz
 
 
+
 axlist = [ax1,ax2,ax3,ax4,ax5,ax6,ax7,ax8]
 
 
@@ -61,6 +62,9 @@ A = table_print(format='terminal')
 B = table_print(format='markdown',outputfile=open(inputdir+'fits/README{0}.md'.format(appendix),'w'))
 C = table_print(format='csv',outputfile=open(inputdir+'fits/table{0}.csv'.format(appendix),'w'))
 D = table_print(format='tex',outputfile=open(inputdir+'fits/table{0}.tex'.format(appendix),'w'))
+
+for p in [A,B,C,D]:
+    p.print_header()
 
 #for irad,rads in enumerate():
 for irad,rads in enumerate(radii):
@@ -154,7 +158,7 @@ if classify:
 
 
         # open the correct chain
-        directory = inputdir+"fits/{0}_d{1:02d}{2:02d}".format(modeltag,minrad,maxrad)
+        directory = inputdir+"fits/{0}_d{1:02d}{2:02d}{3}".format(modeltag,minrad,maxrad,appendix)
         inputfile = directory+'/chains/gaussian-post_equal_weights.dat'
         COMPS,CStats = make_posterior_list_three_rotation_sorted(inputfile)
 
