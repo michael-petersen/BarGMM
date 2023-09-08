@@ -27,11 +27,11 @@ from src.fitmanagement import *
 # read in the model that you want
 from models.apogee import *
 #from models.bulgemock import *
-#from models.barmock import *
+from models.barmock import *
 
 Stars = read_mock_file(datafile)
 
-f = h5py.File("data/apogee/classifications/AllClassifications_{}.h5".format(modeltag),"r")
+f = h5py.File("data/apogee/classifications/AllClassifications_{0}{1}.h5".format(modeltag,appendix),"r")
 
 stride = 10
 stridecounter = 0

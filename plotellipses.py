@@ -27,8 +27,8 @@ from src.localtools import *
 from src.fitmanagement import *
 
 # read in the model that you want
-from models.apogee import *
-#from models.bulgemock import *
+#from models.apogee import *
+from models.bulgemock import *
 #from models.barmock import *
 
 
@@ -57,7 +57,7 @@ for iband,band in enumerate([[3,1],[3,2],[2,1]]):
     for irad,rads in enumerate([[0,1],[1,2],[2,3],[3,4]]):#,[4,5]]):
         minrad,maxrad = rads[0],rads[1]
 
-        directory = inputdir+"fits/{0}_d{1:02d}{2:02d}".format(modeltag,minrad,maxrad)
+        directory = inputdir+"fits/{0}_d{1:02d}{2:02d}{3}".format(modeltag,minrad,maxrad,appendix)
         inputfile = directory+'/chains/gaussian-post_equal_weights.dat'
 
         COMPS,CStats = make_posterior_list_three_rotation_sorted(inputfile)
@@ -111,4 +111,4 @@ ax1.text(-900,900,'Lz-Lx',color='black',va='top',ha='left')
 ax2.text(-900,900,'Lz-Ly',color='black',va='top',ha='left')
 ax3.text(-900,900,'Ly-Lx',color='black',va='top',ha='left')
 
-plt.savefig('figures/ellipseplot_{}.png'.format(modelname),dpi=300)
+plt.savefig('figures/ellipseplot_{0}{1}.png'.format(modelname,appendix),dpi=300)

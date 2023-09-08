@@ -6,10 +6,9 @@ For different bins, the mean radii and star numbers are given below.
  - However, the shape of the distance distribution does not exactly match that of the data.
 
 
-| minimum radius | maximum radius | median radius | number of stars     | mean Lz uncertainty |
-| -------------- | -------------- | ------------- | ------------------- | ------------------  |
-| 0.0            | 1.0            | 0.644         | 4025                |  45.2               |
-| 1.0            | 2.0            | 1.490         | 4819                |  48.3               |
-| 2.0            | 3.0            | 2.456         | 3854                |  54.4               |
-| 3.0            | 4.0            | 3.497         | 3609                |  53.7               |
-| 4.0            | 5.0            | 4.466         | 2889                |  42.8               |
+| minimum radius | maximum radius | <r> (a=1) | Nstars (a=1) | <Lz uncertainty> (a=1) |
+| -------------- | -------------- | --------- | ------------ | ---------------------- |
+| 0.0            | 1.0            | 0.598     | 1560         |  107.1                 |
+| 1.0            | 2.0            | 1.533     | 2643         |  105.1                 |
+| 2.0            | 3.0            | 2.536     | 3044         |  115.5                 |
+| 3.0            | 4.0            | 3.535     | 4458         |  120.6                 |
