@@ -1,28 +1,8 @@
 
-
 # basic imports
 import numpy as np
-from numpy.linalg import eig, inv
 
-# plotting elements
-import matplotlib.pyplot as plt
-%matplotlib inline
-import matplotlib.cm as cm
-import matplotlib as mpl
-mpl.rcParams['font.weight'] = 'medium';mpl.rcParams['xtick.labelsize'] = 10;mpl.rcParams['ytick.labelsize'] = 10
-
-# exptool imports
-from exptool.utils import kde_3d
-from exptool.analysis import pattern
-from exptool.observables import transform
-from exptool.io import particle
-
-import scipy.interpolate as interpolate
-from scipy.interpolate import interp1d
-from scipy.interpolate import UnivariateSpline
-import scipy
-
-# to read fits, we need astropy
+# to read fits, we use astropy
 from astropy.io import fits
 
 # transformation helpers
@@ -35,11 +15,12 @@ xsol,ysol,zsol = -8.3,0.,0.021
 indir = "data/"
 basename = "APOGEE_all_feh8_SNRc"
 
-filename = indir+"4Mike-innergal-bar-gaiadists-distlimit.fits"
+filename = indir+"apogee/raw/APOGEE_BailerJones.fits"
 hdu = fits.open(filename)[1]
 data = hdu.data
 
-# define a data quality mask
+# define a data quality mask:
+# key parameters here are Fe/H cut and two quality cuts (defined correlations and ruwe)
 good = np.isfinite(data['pmra']) &\
        np.isfinite(data['pmdec']) &\
        (data['FE_H']>-0.8) &\
@@ -135,8 +116,6 @@ APOGEE['u'] += usol
 APOGEE['v'] += vsol
 APOGEE['w'] += wsol
 
-plt.scatter(APOGEE['u'],APOGEE['v'],color='black',s=0.1)
-
 APOGEE['Lx'] = APOGEE['y']*APOGEE['w']-APOGEE['z']*APOGEE['v']
 APOGEE['Ly'] = APOGEE['z']*APOGEE['u']-APOGEE['x']*APOGEE['w']
 APOGEE['Lz'] = APOGEE['x']*APOGEE['v']-APOGEE['y']*APOGEE['u']
@@ -147,6 +126,6 @@ APOGEE['L'] = np.sqrt(APOGEE['Lx']*APOGEE['Lx']+APOGEE['Ly']*APOGEE['Ly']+APOGEE
 filename = indir+basename+".txt"
 print_data(APOGEE,filename,criteria)
 
-# this format includes the string names of the stars
+# this format includes the string names of the stars for cross-matching
 filename = indir+basename+"_tagged.txt"
 print_data_with_tags(APOGEE,filename,criteria)
