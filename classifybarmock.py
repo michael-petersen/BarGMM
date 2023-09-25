@@ -78,7 +78,7 @@ for irad,rads in enumerate(radii):
                     p.print_key_column(median,lo,hi,rounding=1)
 
             radval = np.nanmedian(Stars['R'][criteria])
-            F._add_data(comptag,minrad,cnum,ikey,radval,median,lo,hi)
+            F._add_data(comptag[minrad][cnum],ikey,radval,median,lo,hi)
 
         for p in [A,B,C,D]:
             p.print_columnX(comptag,minrad,cnum)

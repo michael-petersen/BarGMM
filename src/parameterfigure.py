@@ -35,15 +35,15 @@ class parameter_figure():
 
         self.pltkeys = pltkeys
 
-    def _add_data(self,comptag,minrad,cnum,ikey,radval,median,lo,hi):
+    def _add_data(self,compname,ikey,radval,median,lo,hi):
 
-        if comptag[minrad][cnum]=='bar':
+        if compname=='bar':
             self.axlist[ikey].plot([radval,radval],[median+lo,median+hi],color='black')
             self.axlist[ikey].scatter(radval,median,marker='X',edgecolor='none',facecolor='black')
-        elif comptag[minrad][cnum]=='disc':
+        elif compname=='disc':
             self.axlist[ikey].plot([radval,radval],[median+lo,median+hi],color='blue')
             self.axlist[ikey].scatter(radval,median,marker='X',edgecolor='none',facecolor='blue')
-        elif comptag[minrad][cnum]=='knot':
+        elif compname=='knot':
             self.axlist[ikey].plot([radval,radval],[median+lo,median+hi],color='red')
             self.axlist[ikey].scatter(radval,median,marker='X',edgecolor='none',facecolor='red')
 
