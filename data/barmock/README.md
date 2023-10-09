@@ -9,6 +9,6 @@ This mock file is the bar 'growth phase' snapshot from the cusp halo model of Pe
  - The trapped component of the bar ends at approximately 3 kpc in physical units (though the apparent length of the bar is much longer, see Petersen, Weinberg, Katz [2023]).
  - We cannot reliably classify any individual star (that is, we cannot provide a $p>0.8$ estimate for most stars). Instead, our validation asks how well we can recover the mean of the distributions.
 
-![Figure 1](angularmomentum_diagnostic.png "Lz Diagnostic"), shows angular momentum vs the square of the radius. The model for the bar is shown in black, while the angular momentum of the circular orbit at each radius is shown in blue. We estimated the angular momentum two different ways: the solid curve extracts the true potential in the $z=0$ plane to measure the circular velocity, while the dashed curve is an estimate for the circular velocity from a spherical mass enclosed measurement.
+![Figure 1](../../figures/angularmomentum_diagnostic.png "Lz Diagnostic"), shows angular momentum vs the square of the radius. The model for the bar is shown in black, while the angular momentum of the circular orbit at each radius is shown in blue. We estimated the angular momentum two different ways: the solid curve extracts the true potential in the $z=0$ plane to measure the circular velocity, while the dashed curve is an estimate for the circular velocity from a spherical mass enclosed measurement.
 
 [^1]: For internal consumption, this is snapshot 1000 from the run001 simulation.
