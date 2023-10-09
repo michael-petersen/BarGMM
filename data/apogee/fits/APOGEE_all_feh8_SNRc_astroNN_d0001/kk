@@ -1,0 +1,708 @@
+ *****************************************************
+ MultiNest v2.9
+ Copyright Farhan Feroz & Mike Hobson
+ Release Feb 2011
+
+ no. of live points =  400
+ dimensionality =   24
+ resuming from previous job
+ *****************************************************
+ Starting MultiNest
+Acceptance Rate:      0.008441
+Replacements:            54450
+Total Samples:         6450725
+ln(Z):           -79267.651128
+Acceptance Rate:      0.008446
+Replacements:            54500
+Total Samples:         6452593
+ln(Z):           -79267.261083
+Acceptance Rate:      0.008452
+Replacements:            54550
+Total Samples:         6454380
+ln(Z):           -79266.866056
+Acceptance Rate:      0.008456
+Replacements:            54600
+Total Samples:         6456792
+ln(Z):           -79266.451427
+Acceptance Rate:      0.008461
+Replacements:            54650
+Total Samples:         6458893
+ln(Z):           -79266.008664
+Acceptance Rate:      0.008465
+Replacements:            54700
+Total Samples:         6461745
+ln(Z):           -79265.579397
+Acceptance Rate:      0.008469
+Replacements:            54750
+Total Samples:         6464942
+ln(Z):           -79265.156518
+Acceptance Rate:      0.008473
+Replacements:            54800
+Total Samples:         6467983
+ln(Z):           -79264.744468
+Acceptance Rate:      0.008476
+Replacements:            54850
+Total Samples:         6471321
+ln(Z):           -79264.341365
+Acceptance Rate:      0.008480
+Replacements:            54900
+Total Samples:         6474248
+ln(Z):           -79263.954504
+Acceptance Rate:      0.008482
+Replacements:            54950
+Total Samples:         6478245
+ln(Z):           -79263.557523
+Acceptance Rate:      0.008486
+Replacements:            55000
+Total Samples:         6481540
+ln(Z):           -79263.184510
+Acceptance Rate:      0.008488
+Replacements:            55050
+Total Samples:         6485348
+ln(Z):           -79262.830641
+Acceptance Rate:      0.008491
+Replacements:            55100
+Total Samples:         6488972
+ln(Z):           -79262.482663
+Acceptance Rate:      0.008493
+Replacements:            55150
+Total Samples:         6493234
+ln(Z):           -79262.131863
+Acceptance Rate:      0.008495
+Replacements:            55200
+Total Samples:         6497628
+ln(Z):           -79261.797235
+Acceptance Rate:      0.008498
+Replacements:            55250
+Total Samples:         6501776
+ln(Z):           -79261.497277
+Acceptance Rate:      0.008500
+Replacements:            55300
+Total Samples:         6505586
+ln(Z):           -79261.214869
+Acceptance Rate:      0.008501
+Replacements:            55350
+Total Samples:         6510915
+ln(Z):           -79260.937725
+
+ MultiNest Warning!
+ Parameter            8  of mode            1  is converging towards the edge of the prior.
+ Parameter           11  of mode            1  is converging towards the edge of the prior.
+ Parameter           12  of mode            1  is converging towards the edge of the prior.
+ Parameter           13  of mode            1  is converging towards the edge of the prior.
+ Parameter           16  of mode            1  is converging towards the edge of the prior.
+ Parameter           19  of mode            1  is converging towards the edge of the prior.
+ Parameter           20  of mode            1  is converging towards the edge of the prior.
+ Parameter           21  of mode            1  is converging towards the edge of the prior.
+ Parameter           22  of mode            1  is converging towards the edge of the prior.
+Acceptance Rate:      0.008501
+Replacements:            55400
+Total Samples:         6516523
+ln(Z):           -79260.661669
+Acceptance Rate:      0.008503
+Replacements:            55450
+Total Samples:         6521478
+ln(Z):           -79260.384392
+Acceptance Rate:      0.008504
+Replacements:            55500
+Total Samples:         6526500
+ln(Z):           -79260.115957
+Acceptance Rate:      0.008501
+Replacements:            55550
+Total Samples:         6534705
+ln(Z):           -79259.857192
+Acceptance Rate:      0.008501
+Replacements:            55600
+Total Samples:         6540418
+ln(Z):           -79259.598747
+Acceptance Rate:      0.008498
+Replacements:            55650
+Total Samples:         6548514
+ln(Z):           -79259.346606
+Acceptance Rate:      0.008498
+Replacements:            55700
+Total Samples:         6554467
+ln(Z):           -79259.109576
+Acceptance Rate:      0.008496
+Replacements:            55750
+Total Samples:         6561591
+ln(Z):           -79258.882131
+Acceptance Rate:      0.008492
+Replacements:            55800
+Total Samples:         6570987
+ln(Z):           -79258.657665
+Acceptance Rate:      0.008486
+Replacements:            55850
+Total Samples:         6581538
+ln(Z):           -79258.422276
+Acceptance Rate:      0.008475
+Replacements:            55900
+Total Samples:         6595959
+ln(Z):           -79258.191074
+Acceptance Rate:      0.008463
+Replacements:            55950
+Total Samples:         6611068
+ln(Z):           -79257.969874
+Acceptance Rate:      0.008455
+Replacements:            56000
+Total Samples:         6623003
+ln(Z):           -79257.761742
+Acceptance Rate:      0.008442
+Replacements:            56050
+Total Samples:         6639188
+ln(Z):           -79257.562093
+Acceptance Rate:      0.008432
+Replacements:            56100
+Total Samples:         6653589
+ln(Z):           -79257.375154
+Acceptance Rate:      0.008419
+Replacements:            56150
+Total Samples:         6669696
+ln(Z):           -79257.196774
+Acceptance Rate:      0.008402
+Replacements:            56200
+Total Samples:         6688558
+ln(Z):           -79257.023657
+Acceptance Rate:      0.008383
+Replacements:            56250
+Total Samples:         6709793
+ln(Z):           -79256.853421
+Acceptance Rate:      0.008357
+Replacements:            56300
+Total Samples:         6737034
+ln(Z):           -79256.686968
+Acceptance Rate:      0.008343
+Replacements:            56350
+Total Samples:         6754065
+ln(Z):           -79256.513133
+
+ MultiNest Warning!
+ Parameter            8  of mode            1  is converging towards the edge of the prior.
+ Parameter           11  of mode            1  is converging towards the edge of the prior.
+ Parameter           12  of mode            1  is converging towards the edge of the prior.
+ Parameter           13  of mode            1  is converging towards the edge of the prior.
+ Parameter           16  of mode            1  is converging towards the edge of the prior.
+ Parameter           19  of mode            1  is converging towards the edge of the prior.
+ Parameter           20  of mode            1  is converging towards the edge of the prior.
+ Parameter           21  of mode            1  is converging towards the edge of the prior.
+ Parameter           22  of mode            1  is converging towards the edge of the prior.
+Acceptance Rate:      0.008306
+Replacements:            56400
+Total Samples:         6790405
+ln(Z):           -79256.331488
+Acceptance Rate:      0.008269
+Replacements:            56450
+Total Samples:         6826561
+ln(Z):           -79256.150126
+Acceptance Rate:      0.008228
+Replacements:            56500
+Total Samples:         6867077
+ln(Z):           -79255.974852
+Acceptance Rate:      0.008188
+Replacements:            56550
+Total Samples:         6906408
+ln(Z):           -79255.804122
+Acceptance Rate:      0.008130
+Replacements:            56600
+Total Samples:         6961497
+ln(Z):           -79255.633467
+Acceptance Rate:      0.008083
+Replacements:            56650
+Total Samples:         7008488
+ln(Z):           -79255.464675
+Acceptance Rate:      0.008045
+Replacements:            56700
+Total Samples:         7047937
+ln(Z):           -79255.299282
+Acceptance Rate:      0.007992
+Replacements:            56750
+Total Samples:         7100812
+ln(Z):           -79255.140155
+Acceptance Rate:      0.007933
+Replacements:            56800
+Total Samples:         7159959
+ln(Z):           -79254.985119
+Acceptance Rate:      0.007859
+Replacements:            56850
+Total Samples:         7233416
+ln(Z):           -79254.821702
+Acceptance Rate:      0.007778
+Replacements:            56900
+Total Samples:         7315795
+ln(Z):           -79254.659877
+Acceptance Rate:      0.007671
+Replacements:            56950
+Total Samples:         7424319
+ln(Z):           -79254.504325
+Acceptance Rate:      0.007607
+Replacements:            57000
+Total Samples:         7493154
+ln(Z):           -79254.356977
+Acceptance Rate:      0.007534
+Replacements:            57050
+Total Samples:         7571935
+ln(Z):           -79254.210609
+Acceptance Rate:      0.007393
+Replacements:            57100
+Total Samples:         7723825
+ln(Z):           -79254.066699
+Acceptance Rate:      0.007287
+Replacements:            57150
+Total Samples:         7842570
+ln(Z):           -79253.924625
+Acceptance Rate:      0.007176
+Replacements:            57200
+Total Samples:         7970904
+ln(Z):           -79253.788575
+Acceptance Rate:      0.007093
+Replacements:            57250
+Total Samples:         8070898
+ln(Z):           -79253.659896
+Acceptance Rate:      0.007000
+Replacements:            57300
+Total Samples:         8186140
+ln(Z):           -79253.537205
+Acceptance Rate:      0.006889
+Replacements:            57350
+Total Samples:         8325375
+ln(Z):           -79253.420268
+
+ MultiNest Warning!
+ Parameter            8  of mode            1  is converging towards the edge of the prior.
+ Parameter           11  of mode            1  is converging towards the edge of the prior.
+ Parameter           12  of mode            1  is converging towards the edge of the prior.
+ Parameter           13  of mode            1  is converging towards the edge of the prior.
+ Parameter           16  of mode            1  is converging towards the edge of the prior.
+ Parameter           19  of mode            1  is converging towards the edge of the prior.
+ Parameter           20  of mode            1  is converging towards the edge of the prior.
+ Parameter           21  of mode            1  is converging towards the edge of the prior.
+ Parameter           22  of mode            1  is converging towards the edge of the prior.
+Acceptance Rate:      0.006762
+Replacements:            57400
+Total Samples:         8489080
+ln(Z):           -79253.311659
+Acceptance Rate:      0.006671
+Replacements:            57450
+Total Samples:         8611539
+ln(Z):           -79253.205045
+Acceptance Rate:      0.006584
+Replacements:            57500
+Total Samples:         8733228
+ln(Z):           -79253.102173
+Acceptance Rate:      0.006590
+Replacements:            57550
+Total Samples:         8733332
+ln(Z):           -79253.002893
+Acceptance Rate:      0.006595
+Replacements:            57600
+Total Samples:         8733416
+ln(Z):           -79252.902580
+Acceptance Rate:      0.006601
+Replacements:            57650
+Total Samples:         8733501
+ln(Z):           -79252.804511
+Acceptance Rate:      0.006607
+Replacements:            57700
+Total Samples:         8733604
+ln(Z):           -79252.705569
+Acceptance Rate:      0.006612
+Replacements:            57750
+Total Samples:         8733715
+ln(Z):           -79252.611133
+Acceptance Rate:      0.006618
+Replacements:            57800
+Total Samples:         8733888
+ln(Z):           -79252.516734
+Acceptance Rate:      0.006623
+Replacements:            57850
+Total Samples:         8734057
+ln(Z):           -79252.424996
+Acceptance Rate:      0.006629
+Replacements:            57900
+Total Samples:         8734130
+ln(Z):           -79252.335285
+Acceptance Rate:      0.006635
+Replacements:            57950
+Total Samples:         8734203
+ln(Z):           -79252.248165
+Acceptance Rate:      0.006640
+Replacements:            58000
+Total Samples:         8734309
+ln(Z):           -79252.163052
+Acceptance Rate:      0.006646
+Replacements:            58050
+Total Samples:         8734419
+ln(Z):           -79252.081682
+Acceptance Rate:      0.006652
+Replacements:            58100
+Total Samples:         8734516
+ln(Z):           -79252.004832
+Acceptance Rate:      0.006657
+Replacements:            58150
+Total Samples:         8734637
+ln(Z):           -79251.930677
+Acceptance Rate:      0.006663
+Replacements:            58200
+Total Samples:         8734763
+ln(Z):           -79251.859618
+Acceptance Rate:      0.006669
+Replacements:            58250
+Total Samples:         8734895
+ln(Z):           -79251.791122
+Acceptance Rate:      0.006674
+Replacements:            58300
+Total Samples:         8735082
+ln(Z):           -79251.724504
+Acceptance Rate:      0.006680
+Replacements:            58350
+Total Samples:         8735230
+ln(Z):           -79251.661709
+
+ MultiNest Warning!
+ Parameter            8  of mode            1  is converging towards the edge of the prior.
+ Parameter           11  of mode            1  is converging towards the edge of the prior.
+ Parameter           12  of mode            1  is converging towards the edge of the prior.
+ Parameter           13  of mode            1  is converging towards the edge of the prior.
+ Parameter           16  of mode            1  is converging towards the edge of the prior.
+ Parameter           19  of mode            1  is converging towards the edge of the prior.
+ Parameter           20  of mode            1  is converging towards the edge of the prior.
+ Parameter           21  of mode            1  is converging towards the edge of the prior.
+ Parameter           22  of mode            1  is converging towards the edge of the prior.
+Acceptance Rate:      0.006685
+Replacements:            58400
+Total Samples:         8735441
+ln(Z):           -79251.601882
+Acceptance Rate:      0.006691
+Replacements:            58450
+Total Samples:         8735671
+ln(Z):           -79251.545391
+Acceptance Rate:      0.006696
+Replacements:            58500
+Total Samples:         8735931
+ln(Z):           -79251.492606
+Acceptance Rate:      0.006702
+Replacements:            58550
+Total Samples:         8736300
+ln(Z):           -79251.443431
+Acceptance Rate:      0.006707
+Replacements:            58600
+Total Samples:         8736643
+ln(Z):           -79251.397307
+Acceptance Rate:      0.006713
+Replacements:            58650
+Total Samples:         8737055
+ln(Z):           -79251.354545
+Acceptance Rate:      0.006718
+Replacements:            58700
+Total Samples:         8737514
+ln(Z):           -79251.315322
+Acceptance Rate:      0.006723
+Replacements:            58750
+Total Samples:         8738111
+ln(Z):           -79251.278662
+Acceptance Rate:      0.006729
+Replacements:            58800
+Total Samples:         8738705
+ln(Z):           -79251.244711
+Acceptance Rate:      0.006734
+Replacements:            58850
+Total Samples:         8739426
+ln(Z):           -79251.212825
+Acceptance Rate:      0.006739
+Replacements:            58900
+Total Samples:         8740252
+ln(Z):           -79251.182390
+Acceptance Rate:      0.006744
+Replacements:            58950
+Total Samples:         8741101
+ln(Z):           -79251.153569
+Acceptance Rate:      0.006749
+Replacements:            59000
+Total Samples:         8741903
+ln(Z):           -79251.126860
+Acceptance Rate:      0.006754
+Replacements:            59050
+Total Samples:         8742834
+ln(Z):           -79251.102304
+Acceptance Rate:      0.006759
+Replacements:            59100
+Total Samples:         8743778
+ln(Z):           -79251.079738
+Acceptance Rate:      0.006764
+Replacements:            59150
+Total Samples:         8745046
+ln(Z):           -79251.058706
+Acceptance Rate:      0.006768
+Replacements:            59200
+Total Samples:         8746853
+ln(Z):           -79251.039304
+Acceptance Rate:      0.006773
+Replacements:            59250
+Total Samples:         8748404
+ln(Z):           -79251.021120
+Acceptance Rate:      0.006777
+Replacements:            59300
+Total Samples:         8750102
+ln(Z):           -79251.003955
+Acceptance Rate:      0.006781
+Replacements:            59350
+Total Samples:         8752122
+ln(Z):           -79250.987944
+
+ MultiNest Warning!
+ Parameter            8  of mode            1  is converging towards the edge of the prior.
+ Parameter           11  of mode            1  is converging towards the edge of the prior.
+ Parameter           12  of mode            1  is converging towards the edge of the prior.
+ Parameter           13  of mode            1  is converging towards the edge of the prior.
+ Parameter           16  of mode            1  is converging towards the edge of the prior.
+ Parameter           19  of mode            1  is converging towards the edge of the prior.
+ Parameter           20  of mode            1  is converging towards the edge of the prior.
+ Parameter           21  of mode            1  is converging towards the edge of the prior.
+ Parameter           22  of mode            1  is converging towards the edge of the prior.
+Acceptance Rate:      0.006785
+Replacements:            59400
+Total Samples:         8755127
+ln(Z):           -79250.972899
+Acceptance Rate:      0.006788
+Replacements:            59450
+Total Samples:         8758093
+ln(Z):           -79250.958963
+Acceptance Rate:      0.006792
+Replacements:            59500
+Total Samples:         8760695
+ln(Z):           -79250.946168
+Acceptance Rate:      0.006794
+Replacements:            59550
+Total Samples:         8764894
+ln(Z):           -79250.934336
+Acceptance Rate:      0.006797
+Replacements:            59600
+Total Samples:         8768974
+ln(Z):           -79250.923422
+Acceptance Rate:      0.006799
+Replacements:            59650
+Total Samples:         8773627
+ln(Z):           -79250.913160
+Acceptance Rate:      0.006801
+Replacements:            59700
+Total Samples:         8778471
+ln(Z):           -79250.903547
+Acceptance Rate:      0.006804
+Replacements:            59750
+Total Samples:         8782177
+ln(Z):           -79250.894566
+Acceptance Rate:      0.006802
+Replacements:            59800
+Total Samples:         8791569
+ln(Z):           -79250.886278
+Acceptance Rate:      0.006802
+Replacements:            59850
+Total Samples:         8799158
+ln(Z):           -79250.878526
+Acceptance Rate:      0.006802
+Replacements:            59900
+Total Samples:         8806577
+ln(Z):           -79250.871249
+Acceptance Rate:      0.006799
+Replacements:            59950
+Total Samples:         8817085
+ln(Z):           -79250.864450
+Acceptance Rate:      0.006797
+Replacements:            60000
+Total Samples:         8827615
+ln(Z):           -79250.858081
+Acceptance Rate:      0.006792
+Replacements:            60050
+Total Samples:         8840838
+ln(Z):           -79250.852071
+Acceptance Rate:      0.006784
+Replacements:            60100
+Total Samples:         8859712
+ln(Z):           -79250.846446
+Acceptance Rate:      0.006776
+Replacements:            60150
+Total Samples:         8876431
+ln(Z):           -79250.841242
+Acceptance Rate:      0.006766
+Replacements:            60200
+Total Samples:         8897622
+ln(Z):           -79250.836370
+Acceptance Rate:      0.006754
+Replacements:            60250
+Total Samples:         8920281
+ln(Z):           -79250.831799
+Acceptance Rate:      0.006744
+Replacements:            60300
+Total Samples:         8941113
+ln(Z):           -79250.827510
+Acceptance Rate:      0.006728
+Replacements:            60350
+Total Samples:         8969388
+ln(Z):           -79250.823532
+
+ MultiNest Warning!
+ Parameter            8  of mode            1  is converging towards the edge of the prior.
+ Parameter           11  of mode            1  is converging towards the edge of the prior.
+ Parameter           12  of mode            1  is converging towards the edge of the prior.
+ Parameter           13  of mode            1  is converging towards the edge of the prior.
+ Parameter           16  of mode            1  is converging towards the edge of the prior.
+ Parameter           19  of mode            1  is converging towards the edge of the prior.
+ Parameter           20  of mode            1  is converging towards the edge of the prior.
+ Parameter           21  of mode            1  is converging towards the edge of the prior.
+ Parameter           22  of mode            1  is converging towards the edge of the prior.
+Acceptance Rate:      0.006706
+Replacements:            60400
+Total Samples:         9007428
+ln(Z):           -79250.819813
+Acceptance Rate:      0.006689
+Replacements:            60450
+Total Samples:         9037721
+ln(Z):           -79250.816362
+Acceptance Rate:      0.006662
+Replacements:            60500
+Total Samples:         9081315
+ln(Z):           -79250.813112
+Acceptance Rate:      0.006631
+Replacements:            60550
+Total Samples:         9131494
+ln(Z):           -79250.810019
+Acceptance Rate:      0.006594
+Replacements:            60600
+Total Samples:         9190517
+ln(Z):           -79250.807118
+Acceptance Rate:      0.006560
+Replacements:            60650
+Total Samples:         9244748
+ln(Z):           -79250.804366
+Acceptance Rate:      0.006501
+Replacements:            60700
+Total Samples:         9336870
+ln(Z):           -79250.801779
+Acceptance Rate:      0.006477
+Replacements:            60750
+Total Samples:         9379099
+ln(Z):           -79250.799365
+Acceptance Rate:      0.006482
+Replacements:            60800
+Total Samples:         9379162
+ln(Z):           -79250.797082
+Acceptance Rate:      0.006488
+Replacements:            60850
+Total Samples:         9379234
+ln(Z):           -79250.794930
+Acceptance Rate:      0.006493
+Replacements:            60900
+Total Samples:         9379314
+ln(Z):           -79250.792875
+Acceptance Rate:      0.006498
+Replacements:            60950
+Total Samples:         9379419
+ln(Z):           -79250.790929
+Acceptance Rate:      0.006504
+Replacements:            61000
+Total Samples:         9379540
+ln(Z):           -79250.789061
+Acceptance Rate:      0.006509
+Replacements:            61050
+Total Samples:         9379650
+ln(Z):           -79250.787285
+Acceptance Rate:      0.006514
+Replacements:            61100
+Total Samples:         9379748
+ln(Z):           -79250.785608
+Acceptance Rate:      0.006519
+Replacements:            61150
+Total Samples:         9379890
+ln(Z):           -79250.784024
+Acceptance Rate:      0.006524
+Replacements:            61200
+Total Samples:         9380087
+ln(Z):           -79250.782532
+Acceptance Rate:      0.006530
+Replacements:            61250
+Total Samples:         9380252
+ln(Z):           -79250.781139
+Acceptance Rate:      0.006535
+Replacements:            61300
+Total Samples:         9380405
+ln(Z):           -79250.779829
+Acceptance Rate:      0.006540
+Replacements:            61350
+Total Samples:         9380616
+ln(Z):           -79250.778602
+
+ MultiNest Warning!
+ Parameter            8  of mode            1  is converging towards the edge of the prior.
+ Parameter           11  of mode            1  is converging towards the edge of the prior.
+ Parameter           12  of mode            1  is converging towards the edge of the prior.
+ Parameter           13  of mode            1  is converging towards the edge of the prior.
+ Parameter           16  of mode            1  is converging towards the edge of the prior.
+ Parameter           19  of mode            1  is converging towards the edge of the prior.
+ Parameter           20  of mode            1  is converging towards the edge of the prior.
+ Parameter           21  of mode            1  is converging towards the edge of the prior.
+ Parameter           22  of mode            1  is converging towards the edge of the prior.
+Acceptance Rate:      0.006545
+Replacements:            61400
+Total Samples:         9380898
+ln(Z):           -79250.777452
+Acceptance Rate:      0.006550
+Replacements:            61450
+Total Samples:         9381220
+ln(Z):           -79250.776368
+Acceptance Rate:      0.006555
+Replacements:            61500
+Total Samples:         9381539
+ln(Z):           -79250.775359
+Acceptance Rate:      0.006561
+Replacements:            61550
+Total Samples:         9381816
+ln(Z):           -79250.774414
+Acceptance Rate:      0.006566
+Replacements:            61600
+Total Samples:         9382219
+ln(Z):           -79250.773522
+Acceptance Rate:      0.006571
+Replacements:            61650
+Total Samples:         9382651
+ln(Z):           -79250.772679
+Acceptance Rate:      0.006576
+Replacements:            61700
+Total Samples:         9383256
+ln(Z):           -79250.771885
+Acceptance Rate:      0.006580
+Replacements:            61750
+Total Samples:         9383806
+ln(Z):           -79250.771146
+Acceptance Rate:      0.006585
+Replacements:            61800
+Total Samples:         9384528
+ln(Z):           -79250.770465
+Acceptance Rate:      0.006590
+Replacements:            61850
+Total Samples:         9385150
+ln(Z):           -79250.769824
+Acceptance Rate:      0.006595
+Replacements:            61900
+Total Samples:         9386083
+ln(Z):           -79250.769224
+Acceptance Rate:      0.006599
+Replacements:            61950
+Total Samples:         9387454
+ln(Z):           -79250.768664
+Acceptance Rate:      0.006604
+Replacements:            62000
+Total Samples:         9388672
+ln(Z):           -79250.768133
+Acceptance Rate:      0.006608
+Replacements:            62050
+Total Samples:         9389939
+ln(Z):           -79250.767630
+Acceptance Rate:      0.006613
+Replacements:            62100
+Total Samples:         9391078
+ln(Z):           -79250.767150
+Acceptance Rate:      0.006617
+Replacements:            62150
+Total Samples:         9392793
+ln(Z):           -79250.766684
+ problem in like.f90                        NaN

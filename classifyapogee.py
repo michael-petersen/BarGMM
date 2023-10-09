@@ -12,12 +12,15 @@ from src.tableprint import *
 from src.parameterfigure import *
 
 # select the model of interest
-from models.apogee import *
+#from models.apogee import *
+#from models.apogeeAstroNN import *
+from models.apogeeStarHorse import *
+
 print(modeltag+appendix)
 Stars = read_mock_file(datafile)
 
 
-classify = False
+classify = True
 
 
 # specify which keys are being plotted
@@ -27,9 +30,9 @@ pltkeys = ['f','Lx', 'Ly','Lz','alpha','sxinv', 'syinv', 'szinv']
 F = parameter_figure(pltkeys)
 
 A = table_print(format='terminal')
-B = table_print(format='markdown',outputfile=open(inputdir+'fits/README{0}.md'.format(appendix),'w'))
-C = table_print(format='csv',outputfile=open(inputdir+'fits/table{0}.csv'.format(appendix),'w'))
-D = table_print(format='tex',outputfile=open(inputdir+'fits/table{0}.tex'.format(appendix),'w'))
+B = table_print(format='markdown',outputfile=open(inputdir+'fits/README{0}.md'.format(modelappendix),'w'))
+C = table_print(format='csv',outputfile=open(inputdir+'fits/table{0}.csv'.format(modelappendix),'w'))
+D = table_print(format='tex',outputfile=open(inputdir+'fits/table{0}.tex'.format(modelappendix),'w'))
 
 for p in [A,B,C,D]:
     p.print_header()
@@ -97,7 +100,6 @@ if classify:
 
         # get the min/max cylindrical radii in kpc
         minrad,maxrad = rads[0],rads[1]
-
 
         # open the correct chain
         directory = inputdir+"fits/{0}_d{1:02d}{2:02d}{3}".format(modeltag,minrad,maxrad,appendix)

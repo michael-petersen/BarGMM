@@ -1,0 +1,58 @@
+device x11 -bg white
+!device postfile 4param.ps
+era
+
+
+expand 1.4
+ctype black
+location 3000 16000 18000 32000
+limits 0. 3 0 10
+box
+xlabel M_{MW}/M_{31}
+ylabel M_{LG}/1e12
+
+
+data ./chains/gaussian-post_equal_weights.dat
+read{fm 1 m 2 ol 3 h 4 var 5}
+set sig=1./sqrt(var)
+
+
+ptype 1 1
+points fm m
+
+ptype 10 3
+ctype red
+expand 1.4
+relocate 1 5
+dot
+
+expand 1.4
+ctype black
+location 19000 32000 18000 32000
+limits 0 1 0.4 1
+box
+xlabel \Omega_\Lambda
+ylabel h
+
+ptype 1 1
+points ol h
+
+expand 1.4
+ptype 10 3
+ctype red
+relocate 0.7 0.7
+dot
+
+
+expand 1.4
+ctype black
+location 3000 16000 3000 16000
+limits 0. 3 0 100
+box
+xlabel M_{MW}/M_{31}
+ylabel \sigma (km/s)
+
+ptype 1 1
+points fm sig
+
+

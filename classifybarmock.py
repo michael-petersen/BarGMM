@@ -106,7 +106,7 @@ if classify:
 
         # define the stars we want to classify
         #criteria = np.where((Stars['R']>(minrad)) & (Stars['R']<(maxrad)))[0]
-        criteria = np.where((Stars['R']>(binprefacs[irad]*minrad)) & (Stars['R']<(binprefacs[irad]*maxrad)))[0]
+        criteria = np.where((Stars['R']>(binprefacs[irad]*minrad)) & (Stars['R']<(binprefacs[irad]*maxrad)) & (Stars['apogee']==apogeeflag))[0]
 
         # do the probabilistic classification
         # allprobs is the full set of classifications
@@ -127,7 +127,7 @@ if classify:
             if disccomp>=0: probabilities[:,0] = allprobs[:,indx,disccomp]
             if barcomp>=0:  probabilities[:,1] = allprobs[:,indx,barcomp]
             if knotcomp>=0: probabilities[:,2] = allprobs[:,indx,knotcomp]
-            probabilities[0:7,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum]]
+            probabilities[0:10,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['u'][starnum],Stars['v'][starnum],Stars['w'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum]]
             if binprefacs[irad] > 0.5:
                 try:
                     dset = f.create_dataset(Stars['apogee_id'][starnum], data=probabilities)

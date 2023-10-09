@@ -5,7 +5,7 @@ inputdir     = 'data/barmock/'
 datafile     = inputdir+"ModelBarYoungMock10000b.txt"
 modeltag     = "ModelBarYoungMock10000b"
 appendix     = "_apog0"  # if this is for the all-sky sample
-appendix     = "_apog1"  # if this is for the SDSS-coverage sample
+#appendix     = "_apog1"  # if this is for the SDSS-coverage sample
 
 modelname    = 'BarMock'
 mockanalysis = True
@@ -16,6 +16,8 @@ binprefacs = [ 1.,   1.,   1.,   1.]
 
 
 if appendix=="_apog0":
+    apogeeflag = 0
+
     # what are the (hand-defined) components?
     comptag = dict()
     comptag[0] = ['disc','bar','knot']
@@ -41,6 +43,8 @@ if appendix=="_apog0":
     complist[3] = [1,-1,0]
 
 if appendix=="_apog1":
+    apogeeflag = 1
+
     # what are the (hand-defined) components?
     comptag = dict()
     comptag[0] = ['disc','bar','knot']

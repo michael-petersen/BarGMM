@@ -1,0 +1,54 @@
+device x11 -bg white
+!device postfile 4param.ps
+era
+
+
+expand 1.4
+ctype black
+location 3000 18000 18000 32000
+limits 0. 3 0 90
+box
+xlabel M_{MW}/M_{31}
+ylabel M_{LG}/1e12
+
+
+data ./chains/gaussian-post_equal_weights.dat
+read{c1 1 c2 2 c3 3 c4 4 c5 5 c6 6 c7 7 c8 8 c9 9 c10 10 c11 11 c12 12 c13 13 c14 14 c15 15 c16 16 c17 17 c18 18 c19 19 c20 20 c21 21 c22 22 c23 23 c24 24}
+set f1       =     c8/(c8+c16+c24)
+set f2       =     c16/(c8+c16+c24)
+set f3       =     c24/(c8+c16+c24)
+
+set r1  = 10.**c1
+set lr1 =lg(r1)
+set r2  =r1 * c9
+set lr2=lg(r2)
+set r3  =r2 * c17
+set lr3 =lg(r3)
+
+
+set a1  = c7 *180/pi
+set a2  = c15*180/pi
+set a3  = c23*180/pi
+
+print{c1 c9 c17 r1 r2 r3}
+points lr1 a1
+ctype blue
+points lr2 a2
+ctype red
+points lr3 a3
+
+
+
+expand 1.4
+ctype black
+location 18000 32000 18000 32000
+limits 0 1 0 90
+box
+xlabel M_{MW}/M_{31}
+ylabel M_{LG}/1e12
+
+points f1 a1
+ctype blue
+points f2 a2
+ctype red
+points f3 a3
