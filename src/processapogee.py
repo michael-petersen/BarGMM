@@ -111,6 +111,7 @@ vtheta = -APOGEE['pmb']*APOGEE['dist']*4.74
 v0     = spherical_to_cartesian_velocities(phi,theta,vr,vphi,vtheta)
 x0     = spherical_to_cartesian_positions(phi,theta,APOGEE['dist'])
 
+# convert to galactocentric frame by removing solar velocity
 APOGEE['u'],APOGEE['v'],APOGEE['w'] = v0
 APOGEE['u'] += usol
 APOGEE['v'] += vsol

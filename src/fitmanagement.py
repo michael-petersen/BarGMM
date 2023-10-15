@@ -66,7 +66,8 @@ def read_mock_file(infile,nsamples = 1000,distance_uncertainty_factor = 1.,xsun=
 
     Mock['L'] = np.sqrt(Mock['Lx']*Mock['Lx']+Mock['Ly']*Mock['Ly']+Mock['Lz']*Mock['Lz'])
 
-    # Monte Carlo errors on the angular momentum
+    # Monte Carlo errors on the angular momentum (and also galactic radius)
+    Mock['eR'] = np.zeros([Mock['Lx'].size,nsamples])
     Mock['eLx'] = np.zeros([Mock['Lx'].size,nsamples])
     Mock['eLy'] = np.zeros([Mock['Lx'].size,nsamples])
     Mock['eLz'] = np.zeros([Mock['Lx'].size,nsamples])
@@ -90,62 +91,12 @@ def read_mock_file(infile,nsamples = 1000,distance_uncertainty_factor = 1.,xsun=
         tmpy += xsun[1]
         tmpz += xsun[2]
 
+        Mock['eR'][s]  = np.sqrt(tmpx*tmpx + tmpy*tmpy)
         Mock['eLx'][s] = tmpy*tmpw-tmpz*tmpv
         Mock['eLy'][s] = tmpz*tmpu-tmpx*tmpw
         Mock['eLz'][s] = tmpx*tmpv-tmpy*tmpu
 
     return Mock
-
-
-
-def make_posterior_list_three_rotation(inputfile):
-    """
-    read the three component posterior
-
-    """
-    A = np.genfromtxt(inputfile)
-
-
-    CStats = dict()
-    CStats['Likelihood'] = A[:,21]
-    cats = ['logL','phi','theta','sxinv','syinv','szinv','alpha','f']
-
-    nchains = len(A[:,0])
-
-    for i in range(0,3):
-        CStats[i] = dict()
-        for icat,cat in enumerate(cats):
-            CStats[i][cat] = np.zeros(nchains)
-
-
-    # sort each line by angular momentum value
-    for l in range(0,nchains):
-        Lord = np.argsort([A[l,0],A[l,7],A[l,14]])
-        for cnum,cval in enumerate(Lord):
-            for icat,cat in enumerate(cats):
-                if cat =='f':
-                    CStats[cnum][cat][l] = A[l,cval*len(cats)+icat]/(A[l,7]+A[l,15]+A[l,23])
-                else:
-                    CStats[cnum][cat][l] = A[l,cval*len(cats)+icat]
-
-
-    # make component products
-    COMPS = dict()
-
-    for cnum in range(0,3):
-
-
-        r   = 10.**CStats[cnum]['logL']
-        th  = np.arccos(CStats[cnum]['theta'])
-        phi = CStats[cnum]['phi']
-        x   = r*np.sin(th)*np.cos(phi)
-        y   = r*np.sin(th)*np.sin(phi)
-        z   = r*np.cos(th)
-
-        COMPS[cnum] = [np.nanmedian(CStats[cnum]['f']),np.nanmedian(x),np.nanmedian(y),np.nanmedian(z),np.nanmedian(1./CStats[cnum]['sxinv']),np.nanmedian(1./CStats[cnum]['syinv']),np.nanmedian(1./CStats[cnum]['szinv']),np.nanmedian(CStats[cnum]['alpha'])]
-
-    return COMPS,CStats
-
 
 
 

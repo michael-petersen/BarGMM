@@ -16,7 +16,33 @@ from models.barmock import *
 print(modeltag+appendix)
 Stars = read_mock_file(datafile)
 
+"""
 
+# now we can also compute the galactic radius uncertainty and angular momentum uncertainty
+# this size works well for single-column journal figures
+fig = plt.figure(figsize=(3.87,3.0),facecolor='white')
+
+xmin = 0.17
+ymin = 0.13
+dx = 0.65
+dy = 0.83
+
+ax1 = fig.add_axes([xmin+0*dx     ,ymin+0*dy,dx,dy])   # main figure
+
+for i in range(0,50):
+    ax1.scatter(Stars['eR'][i],-Stars['eLz'][i],facecolor=cm.magma(i/49.,1.),edgecolor=None,s=.5)
+
+ax1.axis([0.,5.,-1000.,1000.])
+ax1.tick_params(axis="both",direction="in",which="both")
+ax1.set_xlabel('radius')
+ax1.set_ylabel('Lz')
+
+
+
+plt.savefig('/Users/mpetersen/Downloads/radius_lz_uncertainty.png',dpi=300)
+
+
+"""
 classify = True
 
 
@@ -112,7 +138,8 @@ if classify:
         # allprobs is the full set of classifications
         # percentileprob is the 50h percentile
         # errorprob is the 1-sigma error on the classification
-        allprobs,percentileprob,errorprob = make_all_probabilities(Stars,criteria,CStats,nchains=20)
+        nsamples = 20
+        allprobs,percentileprob,errorprob = make_all_probabilities(Stars,criteria,CStats,nchains=nsamples)
 
 
         # which component is which?
@@ -121,13 +148,21 @@ if classify:
         if minrad==radii[0][0]:
             f = h5py.File(inputdir+"classifications/AllClassifications_{0}{1}.h5".format(modeltag,appendix),"w")
 
-        nsamples = 20
         for indx,starnum in enumerate(criteria):
             probabilities = np.zeros([nsamples,4]) # always disc, bar, knot, [x,y,z,Lx,Ly,Lz]
             if disccomp>=0: probabilities[:,0] = allprobs[:,indx,disccomp]
             if barcomp>=0:  probabilities[:,1] = allprobs[:,indx,barcomp]
+
+            # override the bar classification to allow for two components in this bin
+            if (minrad==2) & (appendix=="_apog1"):
+                probabilities[:,1] = allprobs[:,indx,1] + allprobs[:,indx,2]
+
+
             if knotcomp>=0: probabilities[:,2] = allprobs[:,indx,knotcomp]
-            probabilities[0:10,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['u'][starnum],Stars['v'][starnum],Stars['w'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum]]
+
+            # helper quantities
+            probabilities[0:12,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['u'][starnum],Stars['v'][starnum],Stars['w'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum],np.nanstd(Stars['eR'][starnum]),np.nanstd(Stars['eLz'])]
+            
             if binprefacs[irad] > 0.5:
                 try:
                     dset = f.create_dataset(Stars['apogee_id'][starnum], data=probabilities)

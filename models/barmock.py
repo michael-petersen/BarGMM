@@ -5,7 +5,7 @@ inputdir     = 'data/barmock/'
 datafile     = inputdir+"ModelBarYoungMock10000b.txt"
 modeltag     = "ModelBarYoungMock10000b"
 appendix     = "_apog0"  # if this is for the all-sky sample
-#appendix     = "_apog1"  # if this is for the SDSS-coverage sample
+appendix     = "_apog1"  # if this is for the SDSS-coverage sample
 
 modelname    = 'BarMock'
 mockanalysis = True
@@ -49,7 +49,7 @@ if appendix=="_apog1":
     comptag = dict()
     comptag[0] = ['disc','bar','knot']
     comptag[1] = ['disc','bar','knot']
-    comptag[2] = ['disc','disc','bar']
+    comptag[2] = ['disc','bar','bar'] # in this bin, the bar has been split into two components for some reason.
     comptag[3] = ['-','disc','bar']
 
     # by component number, which component is [disc,bar,knot]?

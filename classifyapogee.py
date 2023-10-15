@@ -12,9 +12,9 @@ from src.tableprint import *
 from src.parameterfigure import *
 
 # select the model of interest
-#from models.apogee import *
+from models.apogee import *
 #from models.apogeeAstroNN import *
-from models.apogeeStarHorse import *
+#from models.apogeeStarHorse import *
 
 print(modeltag+appendix)
 Stars = read_mock_file(datafile)
@@ -129,7 +129,7 @@ if classify:
             if disccomp>=0: probabilities[:,0] = allprobs[:,indx,disccomp]
             if barcomp>=0:  probabilities[:,1] = allprobs[:,indx,barcomp]
             if knotcomp>=0: probabilities[:,2] = allprobs[:,indx,knotcomp]
-            probabilities[0:7,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum]]
+            probabilities[0:12,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum],Stars['u'][starnum],Stars['v'][starnum],Stars['w'][starnum],np.nanstd(Stars['eR'][starnum]),np.nanstd(Stars['eLz'])]
             if binprefacs[irad] > 0.5:
                 try:
                     dset = f.create_dataset(Stars['apogee_id'][starnum], data=probabilities)
