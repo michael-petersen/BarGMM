@@ -21,7 +21,7 @@ from src.localtools import *
 from src.fitmanagement import *
 
 from models.apogee import *
-from models.bulgemock import *
+from models.barmock import *
 
 Stars = read_mock_file(datafile)
 
@@ -33,14 +33,104 @@ binprefac = 0.1
 minrad,maxrad = 1,2
 binprefac = 1.
 
+disccomp,barcomp,knotcomp = compnum[minrad]
+
 # open the correct chain
-directory = inputdir+"/fits/{0}_d{1:02d}{2:02d}".format(modeltag,minrad,maxrad)
+directory = inputdir+"/fits/{0}_d{1:02d}{2:02d}{3}".format(modeltag,minrad,maxrad,appendix)
 inputfile = directory+'/chains/gaussian-post_equal_weights.dat'
 COMPS,CStats = make_posterior_list_three_rotation_sorted(inputfile)
 
 # define the stars we want to classify
-criteria = np.where((Stars['R']>(binprefac*minrad)) & (Stars['R']<(binprefac*maxrad)))[0]
+criteria = np.where((Stars['R']>(binprefac*minrad)) & (Stars['R']<(binprefac*maxrad)) & (Stars['apogee']==1))[0]
 
+allprobs,percentileprob,errorprob = make_all_probabilities(Stars,criteria,CStats,nchains=10)
+
+# let's check the bar membership against the classifications
+# allprobs.shape
+# (10, 2643, 3)
+
+# this size works well for single-column journal figures
+fig = plt.figure(figsize=(3.87,3.0),facecolor='white')
+
+xmin = 0.17
+ymin = 0.13
+dx = 0.65
+dy = 0.83
+
+classedsample = Stars['x'][criteria][(Stars['bulge'][criteria]>=0)].size # the size of the total sample
+
+# indices of the classed sample, could look at their actual membership logs
+Stars['apogee_id'][criteria][(Stars['bulge'][criteria]>=0)]
+
+barmems = ((np.nanmedian(allprobs[:,:,barcomp],axis=0)<0.5) & (Stars['bulge'][criteria]>0.)& (Stars['bulge'][criteria]>=0))
+print(Stars['x'][criteria][barmems].size) # particles that are a part of the bar but not classed as such (WRONG)
+barmems = ((np.nanmedian(allprobs[:,:,barcomp],axis=0)<0.5) & (Stars['bulge'][criteria]<=0.)& (Stars['bulge'][criteria]>=0))
+print(Stars['x'][criteria][barmems].size) # particles that are not a part of the bar and are not classed as such (CORRECT)
+barmems = ((np.nanmedian(allprobs[:,:,barcomp],axis=0)>0.5) & (Stars['bulge'][criteria]<=0.)& (Stars['bulge'][criteria]>=0))
+print(Stars['x'][criteria][barmems].size) # particles that are not a part of the bar and are classed as such (WRONG)
+barmems = ((np.nanmedian(allprobs[:,:,barcomp],axis=0)>0.5) & (Stars['bulge'][criteria]>0.)& (Stars['bulge'][criteria]>=0))
+print(Stars['x'][criteria][barmems].size) # particles that are a part of the bar and are classed as such (CORRECT)
+# disc stars are rarely classed as bar stars (3% contamination)
+
+barmems = ((np.nanmedian(allprobs[:,:,disccomp],axis=0)<0.5) & (Stars['bulge'][criteria]>0.)& (Stars['bulge'][criteria]>=0))
+print(Stars['x'][criteria][barmems].size) # particles that are a part of the bar but not classed as such (CORRECT)
+barmems = ((np.nanmedian(allprobs[:,:,disccomp],axis=0)<0.5) & (Stars['bulge'][criteria]<=0.)& (Stars['bulge'][criteria]>=0))
+print(Stars['x'][criteria][barmems].size) # particles that are not a part of the disc and are not classed as such (WRONG)
+barmems = ((np.nanmedian(allprobs[:,:,disccomp],axis=0)>0.5) & (Stars['bulge'][criteria]<=0.)& (Stars['bulge'][criteria]>=0))
+print(Stars['x'][criteria][barmems].size) # particles that are not a part of the bar and are classed as such (CORRECT)
+barmems = ((np.nanmedian(allprobs[:,:,disccomp],axis=0)>0.5) & (Stars['bulge'][criteria]>19.)& (Stars['bulge'][criteria]>=0))
+print(Stars['x'][criteria][barmems].size) # particles that are a part of the bar and are classed as disc (WRONG)
+# the most common failure mode is bar-classified stars leaking into the disc component. these tend to be the larger Lz stars, where the classification is more ambigious. However, these stars are not enough to bias the results in the mock dataset, which recovers the correct pattern speed (derived from the mean Lz of the bar stars).
+
+barmems = ((np.nanmedian(allprobs[:,:,knotcomp],axis=0)>0.5) & (Stars['bulge'][criteria]<10.)& (Stars['bulge'][criteria]>=0))
+print(Stars['x'][criteria][barmems].size) # particles that are not a part of the bar and are classed as knot (WRONG)
+barmems = ((np.nanmedian(allprobs[:,:,knotcomp],axis=0)>0.5) & (Stars['bulge'][criteria]>10.)& (Stars['bulge'][criteria]>=0))
+print(Stars['x'][criteria][barmems].size) # particles that are a part of the bar and are classed as knot (CORRECT)
+# knot stars are classed as bar in PWK21.
+
+
+
+ax1 = fig.add_axes([xmin+0*dx     ,ymin+0*dy,dx,dy])   # main figure
+ax2 = fig.add_axes([xmin+1*dx+0.02,ymin+0*dy,0.02,dy]) # colourbar
+
+
+barmems = ((Stars['bulge'][criteria]>10.)& (Stars['bulge'][criteria]>=0))
+ax1.scatter(np.nanmedian(allprobs[:,barmems,barcomp],axis=0),Stars['Lz'][criteria][barmems],facecolor='firebrick',edgecolor='None',s=3.)
+
+ax1.scatter(np.nanmedian(allprobs[:,barmems,disccomp],axis=0),Stars['Lz'][criteria][barmems],facecolor='limegreen',edgecolor='None',s=3.)
+
+
+
+ax1.scatter(Stars['x'][criteria][barmems],Stars['y'][criteria][barmems],facecolor='firebrick',edgecolor='None',s=3.)
+
+discmems = ((np.nanmedian(allprobs[:,:,disccomp],axis=0)>0.7) & (Stars['bulge'][criteria]>19.))
+#ax1.scatter(Stars['x'][criteria][discmems],Stars['y'][criteria][discmems],facecolor='limegreen',edgecolor='None',s=3.)
+
+ax1.axis([-10.,10.,-10.,10.])
+ax1.set_xlabel('X')
+ax1.set_ylabel('Y')
+
+ax1.tick_params(axis="both",direction="in",which="both")
+
+cmin,cmax = 0.,1.
+norm = mpl.colors.Normalize(vmin=cmin, vmax=cmax)
+cmap = cm.magma
+cb1 = mpl.colorbar.ColorbarBase(ax2, cmap=cmap,norm=norm)
+cb1.set_label('colourbar label')
+cb1.set_ticks([0.,0.5,1.0])
+cb1.ax.minorticks_off()
+
+plt.savefig('/Users/mpetersen/Downloads/comp_bar.png',dpi=300)
+
+
+
+
+ax1.scatter(np.nanmedian(allprobs[:,:,barcomp],axis=0),Stars['bulge'][criteria],facecolor='firebrick',edgecolor='None',s=3.)
+ax1.scatter(np.nanmedian(allprobs[:,:,disccomp],axis=0),Stars['bulge'][criteria],facecolor='limegreen',edgecolor='None',s=3.)
+ax1.scatter(np.nanmedian(allprobs[:,:,knotcomp],axis=0),Stars['bulge'][criteria],facecolor='indigo',edgecolor='None',s=3.)
+ax1.axis([0.,1.,-1.,21.])
+ax1.set_xlabel('median bar probability')
+ax1.set_ylabel('bar membership')
 
 
 

@@ -9,9 +9,13 @@ For different bins, the mean radii and star numbers are given below.
 | minimum radius | maximum radius | <r> (a=1) | Nstars (a=1) | <Lz uncertainty> (a=1) |
 | -------------- | -------------- | --------- | ------------ | ---------------------- |
 | 0.0            | 1.0            | 0.742     |  381         |  100.7                 |
+| 0.5            | 1.5            | 1.116     |  868         |  101.1                 |
 | 1.0            | 2.0            | 1.560     | 1266         |  103.3                 |
+| 1.5            | 2.5            | 2.007     | 1446         |  105.8                 |
 | 2.0            | 3.0            | 2.548     | 1643         |  112.7                 |
+| 2.5            | 3.5            | 3.058     | 2048         |  119.4                 |
 | 3.0            | 4.0            | 3.529     | 2438         |  117.4                 |
+| 3.5            | 4.5            | 3.998     | 2588         |  108.0                 |
 
 
 | minimum radius | maximum radius | <r> (a=0) | Nstars (a=0) | <Lz uncertainty> (a=0) |

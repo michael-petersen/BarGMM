@@ -25,7 +25,7 @@ from scipy.optimize import curve_fit
 from scipy.optimize import fmin, minimize
 
 
-#appendix="_apog0"
+appendix="_apog0"
 appendix="_apog1"
 
 # load the classification data
@@ -115,7 +115,7 @@ def linear(xs,m):
 res = []
 for indx, i in tqdm.tqdm_notebook(enumerate(weights.T)):
     def loss2(w):
-        XS,YS = (R+np.random.normal(0.,0.5*eR))**2,Lz+np.random.normal(0.,0.5*eLz) # Lz uncertainties too correlated in the mock, reduce overall uncertainties as a test to compensate
+        XS,YS = (R+np.random.normal(0.,eR))**2,Lz+np.random.normal(0.,eLz) # Lz uncertainties too correlated in the mock, reduce overall uncertainties as a test to compensate
         popt, pcov = curve_fit(linear,XS,YS)
         ypred = linear(XS,w)
         # here we will use a weighted least squares

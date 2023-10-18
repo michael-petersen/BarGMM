@@ -21,6 +21,61 @@ print(modeltag+appendix)
 #classify = True
 
 
+
+xmin,dx = 0.1,0.16
+ymin,dy = 0.1,0.16
+xbuf,ybuf = 0.01,0.01
+
+fig = plt.figure(figsize=(12,12),facecolor='white')
+
+#for irad,rads in enumerate():
+for irad,rads in enumerate(radii):
+    minrad,maxrad = rads[0],rads[1]
+    print(minrad,maxrad)
+
+    if minrad == 15:
+        pass
+    else:
+        continue
+
+    directory = inputdir+"/fits/{0}_d{1:02d}{2:02d}{3}".format(modeltag,minrad,maxrad,appendix)
+    inputfile = directory+'/chains/gaussian-post_equal_weights.dat'
+    A = np.genfromtxt(inputfile)
+    CStats = dict()
+    CStats['Likelihood'] = A[:,24]
+    # the columns we want are 0,7,8,15,16,23
+    nums = [0,7,8,15,16,23]
+    tags = ['$\\log L$','$f_1$','$\\xi_2$','$f_2$','$\\xi_3$','$f_3$']
+
+    for icat1,cat1 in enumerate(nums):
+        for icat2,cat2 in enumerate(nums):
+            if icat1<icat2:
+                ax = fig.add_axes([xmin+icat1*(dx+xbuf),ymin+(icat2-1)*(dy+ybuf),dx,dy])
+                for c in [0,1,2]:
+                    xval = A[:,cat1]
+                    yval = A[:,cat2]
+
+                    ax.scatter(xval,yval,facecolor='black',edgecolor='None',s=1.,alpha=0.2)
+                    if icat1==0:
+                        ax.set_ylabel(tags[icat2])
+                    if icat1+1==icat2:
+                        ax.set_xlabel(tags[icat1])
+                    if icat1+1<icat2:
+                        ax.set_xticklabels(())
+                    if icat1>0:
+                        ax.set_yticklabels(())
+                    ax.axis([0.,1.,0.,1.])
+
+                    if icat1==0:
+                        ax.axis([0.,3.,0.,1.])
+                ax.tick_params(axis="both",direction="in",which="both")
+
+plt.savefig('/Users/mpetersen/Downloads/testcorner.png',dpi=300)
+
+
+
+"""
+
 # specify which keys are being plotted
 pltkeys = ['f','Lx', 'Ly','Lz','alpha','sxinv', 'syinv', 'szinv']
 
@@ -188,7 +243,7 @@ cb1.set_ticks([0.,0.25,0.5])
 cb1.ax.minorticks_off()
 
 plt.savefig('/Users/mpetersen/Downloads/testcorr.png',dpi=300)
-
+"""
 
 
 """

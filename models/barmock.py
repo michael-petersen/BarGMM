@@ -4,18 +4,20 @@ import numpy as np
 inputdir     = 'data/barmock/'
 datafile     = inputdir+"ModelBarYoungMock10000b.txt"
 modeltag     = "ModelBarYoungMock10000b"
-appendix     = "_apog0"  # if this is for the all-sky sample
+#appendix     = "_apog0"  # if this is for the all-sky sample
 appendix     = "_apog1"  # if this is for the SDSS-coverage sample
 
 modelname    = 'BarMock'
 mockanalysis = True
 
 # what are the bins available to classify?
-radii      = [[0,1],[1,2],[2,3],[3,4]]
-binprefacs = [ 1.,   1.,   1.,   1.]
 
 
 if appendix=="_apog0":
+
+    radii      = [[0,1],[1,2],[2,3],[3,4]]
+    binprefacs = [ 1.,   1.,   1.,   1.]
+
     apogeeflag = 0
 
     # what are the (hand-defined) components?
@@ -45,12 +47,20 @@ if appendix=="_apog0":
 if appendix=="_apog1":
     apogeeflag = 1
 
+    radii      = [[0,1],[5,15],[1,2],[15,25],[2,3],[25,35],[3,4],[35,45]]
+    binprefacs = [ 1.,   0.1,   1.,   0.1,    1.,   0.1,   1.,   0.1]
+
+
     # what are the (hand-defined) components?
     comptag = dict()
     comptag[0] = ['disc','bar','knot']
     comptag[1] = ['disc','bar','knot']
     comptag[2] = ['disc','bar','bar'] # in this bin, the bar has been split into two components for some reason.
     comptag[3] = ['-','disc','bar']
+    comptag[5] = ['disc','bar','knot']
+    comptag[15] = ['disc','bar','knot']
+    comptag[25] = ['disc','disc','bar'] # in this bin, the bar has been split into two components for some reason.
+    comptag[35] = ['-','-','disc']
 
     # by component number, which component is [disc,bar,knot]?
     # assign the number of the cluster
@@ -59,6 +69,10 @@ if appendix=="_apog1":
     compnum[1] = [0,1,2]
     compnum[2] = [0,1,-1]
     compnum[3] = [1,2,-1]
+    compnum[5] = [0,1,2]
+    compnum[15] = [0,1,2]
+    compnum[25] = [0,2,-1]
+    compnum[35] = [2,-1,-1]
 
     # for ellipse tracing
     # by [bar,disc,knot]=[0,1,2], which component is which?

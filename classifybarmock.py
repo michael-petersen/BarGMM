@@ -162,7 +162,7 @@ if classify:
 
             # helper quantities
             probabilities[0:12,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['u'][starnum],Stars['v'][starnum],Stars['w'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum],np.nanstd(Stars['eR'][starnum]),np.nanstd(Stars['eLz'])]
-            
+
             if binprefacs[irad] > 0.5:
                 try:
                     dset = f.create_dataset(Stars['apogee_id'][starnum], data=probabilities)
