@@ -13,8 +13,6 @@ from src.parameterfigure import *
 
 # select the model of interest
 from models.apogee import *
-#from models.apogeeAstroNN import *
-#from models.apogeeStarHorse import *
 
 print(modeltag+appendix)
 Stars = read_mock_file(datafile)
