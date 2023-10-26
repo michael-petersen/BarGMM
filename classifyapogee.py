@@ -108,20 +108,22 @@ if classify:
         #criteria = np.where((Stars['R']>(minrad)) & (Stars['R']<(maxrad)))[0]
         criteria = np.where((Stars['R']>(binprefacs[irad]*minrad)) & (Stars['R']<(binprefacs[irad]*maxrad)))[0]
 
+        # how many random draws to take?
+        nsamples = 500
+
         # do the probabilistic classification
         # allprobs is the full set of classifications
         # percentileprob is the 50h percentile
         # errorprob is the 1-sigma error on the classification
-        allprobs,percentileprob,errorprob = make_all_probabilities(Stars,criteria,CStats,nchains=20)
+        allprobs,percentileprob,errorprob = make_all_probabilities(Stars,criteria,CStats,nchains=nsamples)
 
 
         # which component is which?
         disccomp,barcomp,knotcomp = compnum[minrad]
 
         if minrad==radii[0][0]:
-            f = h5py.File(inputdir+"classifications/AllClassifications_{0}{1}.h5".format(modeltag,appendix),"w")
+            f = h5py.File(inputdir+"classifications/AllClassifications_{0}{1}_500.h5".format(modeltag,appendix),"w")
 
-        nsamples = 20
         for indx,starnum in enumerate(criteria):
             probabilities = np.zeros([nsamples,4]) # always disc, bar, knot, [x,y,z,Lx,Ly,Lz]
             if disccomp>=0: probabilities[:,0] = allprobs[:,indx,disccomp]

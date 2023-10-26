@@ -31,7 +31,7 @@ appendix2="_apog1"
 
 # load the csv data
 data1 = pd.read_csv('data/barmock/fits/table{}.csv'.format(appendix1))
-data2 = pd.read_csv('data/barmock/fits/table{}.csv'.format(appendix2))
+data2 = pd.read_csv('data/barmock/fits/table{}_consolidated.csv'.format(appendix2))
 
 mask_disc1 = np.where(data1['comp']=='disc')
 mask_knot1 = np.where(data1['comp']=='knot')
