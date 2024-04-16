@@ -16,6 +16,7 @@ from scipy.interpolate import interp1d
 from scipy.interpolate import UnivariateSpline
 import scipy
 
+#import sys; sys.path.append("../")
 
 from src.localtools import *
 from src.fitmanagement import *
@@ -63,12 +64,19 @@ classedsample = Stars['x'][criteria][(Stars['bulge'][criteria]>=0)].size # the s
 Stars['apogee_id'][criteria][(Stars['bulge'][criteria]>=0)]
 
 barmems = ((np.nanmedian(allprobs[:,:,barcomp],axis=0)<0.5) & (Stars['bulge'][criteria]>0.)& (Stars['bulge'][criteria]>=0))
+print('particles that are a part of the bar but not classed as such (WRONG)')
 print(Stars['x'][criteria][barmems].size) # particles that are a part of the bar but not classed as such (WRONG)
+
 barmems = ((np.nanmedian(allprobs[:,:,barcomp],axis=0)<0.5) & (Stars['bulge'][criteria]<=0.)& (Stars['bulge'][criteria]>=0))
+print(' particles that are not a part of the bar and are not classed as such (CORRECT)')
 print(Stars['x'][criteria][barmems].size) # particles that are not a part of the bar and are not classed as such (CORRECT)
+
 barmems = ((np.nanmedian(allprobs[:,:,barcomp],axis=0)>0.5) & (Stars['bulge'][criteria]<=0.)& (Stars['bulge'][criteria]>=0))
+print('particles that are not a part of the bar and are classed as such (WRONG)')
 print(Stars['x'][criteria][barmems].size) # particles that are not a part of the bar and are classed as such (WRONG)
+
 barmems = ((np.nanmedian(allprobs[:,:,barcomp],axis=0)>0.5) & (Stars['bulge'][criteria]>0.)& (Stars['bulge'][criteria]>=0))
+print('particles that are a part of the bar and are classed as such (CORRECT)')
 print(Stars['x'][criteria][barmems].size) # particles that are a part of the bar and are classed as such (CORRECT)
 # disc stars are rarely classed as bar stars (3% contamination)
 

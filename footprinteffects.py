@@ -31,15 +31,20 @@ appendix2="_apog1"
 
 # load the csv data
 data1 = pd.read_csv('data/barmock/fits/table{}.csv'.format(appendix1))
+
+data1 = pd.read_csv('data/barmock/fits/table{}.csv'.format(appendix2))
+
 data2 = pd.read_csv('data/barmock/fits/table{}_consolidated.csv'.format(appendix2))
 
 mask_disc1 = np.where(data1['comp']=='disc')
 mask_knot1 = np.where(data1['comp']=='knot')
 mask_bar1 = np.where(data1['comp']=='bar')
+#mask_bar1 = np.where(data1['comp']=='disc')
 
 mask_disc2 = np.where(data2['comp']=='disc')
 mask_knot2 = np.where(data2['comp']=='knot')
 mask_bar2 = np.where(data2['comp']=='bar')
+#mask_bar2 = np.where(data2['comp']=='disc')
 
 
 
@@ -54,7 +59,7 @@ dy = 0.83
 ax1 = fig.add_axes([xmin+0*dx     ,ymin+0*dy,dx,dy])   # main figure
 
 quantity = 'alpha'
-quantity = 'Lz'
+#quantity = 'Lz'
 
 ax1.scatter(data1['starmed'].values[mask_bar1],data1[quantity].values[mask_bar1],edgecolor='firebrick',facecolor='None')
 ax1.scatter(data2['starmed'].values[mask_bar2],data2[quantity].values[mask_bar2],facecolor='firebrick')
@@ -65,10 +70,23 @@ for i in mask_bar1:
 for i in mask_bar2:
     ax1.plot([data2['starmed'].values[i],data2['starmed'].values[i]],[data2[quantity].values[i]+data2[quantity+'-'].values[i],data2[quantity].values[i]+data2[quantity+'+'].values[i]],color='firebrick')
 
+
+Dangle = {0.0: 21.818181818181813,
+ 0.5: 18.18181818181813,
+ 1.0: 18.18181818181813,
+ 1.5: 10.909090909090878,
+ 2.0: 10.909090909090878,
+ 2.5: 7.272727272727252,
+ 3.0: 10.909090909090878,
+ 3.5: 10.45454545454544}
+
+ax1.plot([i+0.5 for i in Dangle.keys()],[90.-i for i in Dangle.values()],color='black',linestyle='dashed')
+ax1.plot([i+0.5 for i in Dangle.keys()],[90.-12. for i in Dangle.values()],color='black',linestyle='solid')
+
 #ax1.axis([0.,1.,0.,1.])
 ax1.tick_params(axis="both",direction="in",which="both")
 ax1.set_xlabel('radius (kpc)')
 ax1.set_ylabel('$\\alpha$')
-ax1.set_ylabel('$L_z$')
+#ax1.set_ylabel('$L_z$')
 
 plt.savefig('/Users/mpetersen/Downloads/mocktest.png',dpi=300)

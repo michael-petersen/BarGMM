@@ -13,6 +13,10 @@ from src.parameterfigure import *
 
 # select the model of interest
 from models.barmock import *
+#from models.barmocksmallerror import *
+#from models.oldbarmock import *
+#from models.newbarmock import *
+
 print(modeltag+appendix)
 Stars = read_mock_file(datafile)
 
@@ -43,7 +47,7 @@ plt.savefig('/Users/mpetersen/Downloads/radius_lz_uncertainty.png',dpi=300)
 
 
 """
-classify = True
+classify = False
 
 
 # specify which keys are being plotted

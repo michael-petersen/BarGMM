@@ -70,4 +70,4 @@ for ikey,key in enumerate(keylst[::200]):
         pass
 
 
-plt.savefig('/Users/mpetersen/Downloads/medconvergence.png',dpi=300)
+plt.savefig('figures/medconvergence.png',dpi=300)
