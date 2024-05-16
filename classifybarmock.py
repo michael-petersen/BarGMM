@@ -19,6 +19,9 @@ Stars = read_mock_file(datafile)
 
 classify = True
 
+# np.unique(Stars['bulge'])
+#array([-99.,   0.,   1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.,   9.,10.,  11.,  12.,  13.,  14.,  15.,  16.,  17.,  18.,  19.,  20.])
+# the >0 numbers correspond to how many times an orbit was classed as trapped
 
 # specify which keys are being plotted
 pltkeys = ['f','Lx', 'Ly','Lz','alpha','sxinv', 'syinv', 'szinv']
@@ -127,7 +130,7 @@ if classify:
             if disccomp>=0: probabilities[:,0] = allprobs[:,indx,disccomp]
             if barcomp>=0:  probabilities[:,1] = allprobs[:,indx,barcomp]
             if knotcomp>=0: probabilities[:,2] = allprobs[:,indx,knotcomp]
-            probabilities[0:10,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['u'][starnum],Stars['v'][starnum],Stars['w'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum]]
+            probabilities[0:12,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['u'][starnum],Stars['v'][starnum],Stars['w'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum],Stars['bulge'][starnum],Stars['apogee'][starnum]]
             if binprefacs[irad] > 0.5:
                 try:
                     dset = f.create_dataset(Stars['apogee_id'][starnum], data=probabilities)

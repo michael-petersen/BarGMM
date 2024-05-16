@@ -20,19 +20,63 @@ from scipy.interpolate import interp1d
 from scipy.interpolate import UnivariateSpline
 import scipy
 
+import h5py
+
 
 from src.localtools import *
 from src.fitmanagement import *
 
 # read in the model that you want
-from models.apogee import *
-#from models.bulgemock import *
-from models.barmock import *
+#from models.apogee import *
+from models.bulgemock import *
+#from models.barmock import *
 
 Stars = read_mock_file(datafile)
 
-f = h5py.File("data/apogee/classifications/AllClassifications_{0}{1}.h5".format(modeltag,appendix),"r")
+# sample = np.where((Stars['R']<1)&(Stars['apogee']==1)&(Stars['bulge']==-1.))
+# len(sample[0]) # = 386
+# sample = np.where((Stars['R']<1)&(Stars['apogee']==1)&(Stars['bulge']!=-1.))
+# len(sample[0]) # = 228
+# therefore, the correct answer for apogee==1 is 386/(386+228)=62%
+# we got 65% p/m 2%, which is pretty darn good!
 
+# sample = np.where((Stars['R']>1)&(Stars['R']<2)&(Stars['apogee']==1)&(Stars['bulge']==-1.))
+# len(sample[0]) # = 484
+# sample = np.where((Stars['R']>1)&(Stars['R']<2)&(Stars['apogee']==1)&(Stars['bulge']!=-1.))
+# len(sample[0]) # = 1006
+# therefore, the correct answer for apogee==1 is 484/(484+1006)=32%
+# we got 16% p/m 2%, which is off, and suggests that the bar is taking over classification here
+
+# but a big difference with apogee==0 and apogee==1.
+
+f = h5py.File(inputdir+"classifications/AllClassifications_{0}{1}.h5".format(modeltag,appendix),"r")
+
+redclr = 0
+blkclr = 0
+stride = 10
+stridecounter = 0
+for key in f.keys():
+    if (stridecounter % stride ) == 0:
+        classified = f[key][:,2] # 0 disc; 1 bar; 2 knot
+        truebulge = f[key][10,3]
+        if np.nanmedian(classified<0.5):
+            if truebulge==-1.:
+                clr = 'red'
+                redclr+=1
+            else:
+                clr = 'black'
+                blkclr+=1
+            _ = plt.plot(classified[np.argsort(classified)],np.linspace(0,1.,classified.size),color=clr,lw=1.0)
+    stridecounter += 1
+
+print('red={0},black={1}'.format(redclr,blkclr))
+plt.xlabel('classification probability')
+plt.ylabel('fraction')
+
+plt.savefig('figures/testclassificationarray.png',dpi=300)
+
+
+plt.figure()
 stride = 10
 stridecounter = 0
 for key in f.keys():
@@ -48,8 +92,9 @@ plt.plot(barr*np.cos(-10*np.pi/180.),barr*np.sin(-10*np.pi/180.),color='black',l
 plt.plot(barr*np.cos(-20*np.pi/180.),barr*np.sin(-20*np.pi/180.),color='black',lw=2.)
 plt.plot(barr*np.cos(-30*np.pi/180.),barr*np.sin(-30*np.pi/180.),color='black',lw=2.)
 
+plt.savefig('figures/testclassification.png',dpi=300)
 
-
+"""
 # for the mocks, do a check against reality
 
 if mockanalysis:
@@ -250,3 +295,4 @@ for component in ['bar','disc','knot']:
     ax3.set_ylabel('Lz (kpc km/s)')
 
     plt.savefig('figures/allangmomview_{}_{}.png'.format(component,modelname),dpi=300)
+"""

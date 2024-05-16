@@ -17,8 +17,11 @@ print(modeltag+appendix)
 Stars = read_mock_file(datafile)
 
 
-classify = False
+classify = True
 
+# np.unique(Stars['bulge'])
+# array([-99.,  -1.,   0.,   1.,   2.,   3.,   4.,   5.,   6.,   7.,   8.,9.,  10.,  11.,  12.,  13.,  14.,  15.,  16.,  17.,  18.,  19.,20.])
+# in this list, -1 corresponds to being an injected bulge member
 
 # specify which keys are being plotted
 pltkeys = ['f','Lx', 'Ly','Lz','alpha','sxinv', 'syinv', 'szinv']
@@ -112,7 +115,8 @@ if classify:
         # allprobs is the full set of classifications
         # percentileprob is the 50h percentile
         # errorprob is the 1-sigma error on the classification
-        allprobs,percentileprob,errorprob = make_all_probabilities(Stars,criteria,CStats,nchains=20)
+        nsamples = 50
+        allprobs,percentileprob,errorprob = make_all_probabilities(Stars,criteria,CStats,nchains=nsamples)
 
 
         # which component is which?
@@ -121,13 +125,12 @@ if classify:
         if minrad==radii[0][0]:
             f = h5py.File(inputdir+"classifications/AllClassifications_{0}{1}.h5".format(modeltag,appendix),"w")
 
-        nsamples = 20
         for indx,starnum in enumerate(criteria):
             probabilities = np.zeros([nsamples,4]) # always disc, bar, knot, [x,y,z,Lx,Ly,Lz]
             if disccomp>=0: probabilities[:,0] = allprobs[:,indx,disccomp]
             if barcomp>=0:  probabilities[:,1] = allprobs[:,indx,barcomp]
             if knotcomp>=0: probabilities[:,2] = allprobs[:,indx,knotcomp]
-            probabilities[0:7,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum]]
+            probabilities[0:12,3] = [Stars['R'][starnum],Stars['x'][starnum],Stars['y'][starnum],Stars['z'][starnum],Stars['u'][starnum],Stars['v'][starnum],Stars['w'][starnum],Stars['Lx'][starnum],Stars['Ly'][starnum],Stars['Lz'][starnum],Stars['bulge'][starnum],Stars['apogee'][starnum]]
             if binprefacs[irad] > 0.5:
                 try:
                     dset = f.create_dataset(Stars['apogee_id'][starnum], data=probabilities)

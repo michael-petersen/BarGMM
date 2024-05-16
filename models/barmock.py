@@ -5,7 +5,7 @@ inputdir     = 'data/barmock/'
 datafile     = inputdir+"ModelBarYoungMock10000b.txt"
 modeltag     = "ModelBarYoungMock10000b"
 appendix     = "_apog0"  # if this is for the all-sky sample
-#appendix     = "_apog1"  # if this is for the SDSS-coverage sample
+appendix     = "_apog1"  # if this is for the SDSS-coverage sample
 
 modelname    = 'BarMock'
 mockanalysis = True
